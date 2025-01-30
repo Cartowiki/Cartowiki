@@ -6,6 +6,8 @@ Cette carte représente deux types d’éléments : les villes et les états. Le
 
 Les utilisateurs peuvent tous contribuer à cette base de données à travers différentes interfaces. Une interface pour les pays et une interface pour les villes. Un utilisateur peut également visualiser les cartes au fil des ans sans pour autant contribuer.
 
+Ancien github : https://github.com/bhagavadgitadu22/cartowiki
+
 ## Développement
 
 Le développement de ce projet a lieu en tant qu'exercice pour un groupe de 4 élèves de l'[École Centrale de Nantes](https://www.ec-nantes.fr) en option Informatique des Systèmes d'Information.
