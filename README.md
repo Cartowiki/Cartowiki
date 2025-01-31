@@ -11,3 +11,9 @@ Ancien github : https://github.com/bhagavadgitadu22/cartowiki
 ## Développement
 
 Le développement de ce projet a lieu en tant qu'exercice pour un groupe de 4 élèves de l'[École Centrale de Nantes](https://www.ec-nantes.fr) en option Informatique des Systèmes d'Information.
+
+## Installation
+TODO
+
+<!-- docker cp geoserver:/opt/geoserver/data_dir ./geoserver -->
+<!-- pg_restore -U postgres -d geodb ./init-data.sql -->
