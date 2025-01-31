@@ -1,0 +1,56 @@
+services:
+  postgis:
+    image: postgis/postgis:17-3.5
+    container_name: postgis
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: geodb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis-data:/var/lib/postgresql/data
+      - ./init-data.sql:/docker-entrypoint-initdb.d/init-data.sql
+
+  geoserver:
+    image: kartoza/geoserver
+    container_name: geoserver
+    restart: always
+    environment:
+      GEOSERVER_ADMIN_USER: admin
+      GEOSERVER_ADMIN_PASSWORD: geoserver
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./geoserver/data_dir:/opt/geoserver/data_dir
+
+  spring-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: spring-backend
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgis:5432/geodb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - postgis
+
+  angular:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: angular
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  postgis-data:
+  geoserver-data:
