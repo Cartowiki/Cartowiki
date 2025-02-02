@@ -18,6 +18,6 @@ public class UserService {
      * @return Flag if all the fields' sizes are legit
      */
     public boolean checkFieldsSize(User user) {
-        return user.getMail().length() <= 128 && user.getPseudo().length() <= 32 && user.getPasswordHash().length() <= 128;
+        return user.getMail().length() <= 128 && user.getPseudo().length() <= 32 && user.getPassword().length() <= 128;
     }
 }

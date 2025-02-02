@@ -19,7 +19,7 @@ public class User {
     private int id;
 
     @Column(name = "mdp_hash")
-    private String passwordHash;
+    private String password;
 
     @Column(name = "niveau_admin")
     private int adminLevel;
@@ -37,14 +37,14 @@ public class User {
     /**
      * Full-argument constructor
      * @param id User's id
-     * @param passwordHash User's hashed password
+     * @param password User's password
      * @param adminLevel User's adminstrator level
      * @param pseudo User's pseudonym
      * @param mail User's mail address
      */
-    public User(int id, String passwordHash, int adminLevel, String pseudo, String mail) {
+    public User(int id, String password, int adminLevel, String pseudo, String mail) {
         this.id = id;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.adminLevel = adminLevel;
         this.pseudo = pseudo;
         this.mail = mail;
@@ -67,19 +67,19 @@ public class User {
     }
 
     /**
-     * User's hashed password getter
-     * @return User's hashed password
+     * User's password getter
+     * @return User's password
      */
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
     /**
-     * User's hashed password setter
-     * @param passwordHash New hashed password
+     * User's password setter
+     * @param password New password
      */
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /**
