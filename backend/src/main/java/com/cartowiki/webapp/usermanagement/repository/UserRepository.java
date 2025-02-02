@@ -1,9 +1,9 @@
-package com.cartowiki.webapp.auth.repository;
+package com.cartowiki.webapp.usermanagement.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.cartowiki.webapp.auth.model.User;
+import com.cartowiki.webapp.usermanagement.model.User;
 
 /**
  * Requests management about the User entity in the database

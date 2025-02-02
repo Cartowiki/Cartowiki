@@ -1,8 +1,8 @@
-package com.cartowiki.webapp.auth.service;
+package com.cartowiki.webapp.usermanagement.service;
 
 import org.springframework.stereotype.Service;
 
-import com.cartowiki.webapp.auth.model.User;
+import com.cartowiki.webapp.usermanagement.model.User;
 
 /**
  * Operations on User instances

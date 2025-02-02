@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.auth.model;
+package com.cartowiki.webapp.usermanagement.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
