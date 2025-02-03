@@ -146,7 +146,22 @@ public class User implements UserDetails{
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_CONTRIBUTOR"));
+        Collection<? extends GrantedAuthority> authorization;
+
+        switch (adminLevel) {
+            case 0:
+                authorization = Collections.singletonList(new SimpleGrantedAuthority("ROLE_CONTRIBUTOR"));
+                break;
+        
+            case 1:
+                authorization = Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"));
+                break;
+
+            default:
+                authorization = Collections.emptyList();
+        }
+        
+        return authorization;
     }
 
     /**
