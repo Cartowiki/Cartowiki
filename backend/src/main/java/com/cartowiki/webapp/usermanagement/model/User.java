@@ -24,7 +24,9 @@ public class User {
     @Column(name = "niveau_admin")
     private int adminLevel;
 
-    private String pseudo;
+    @Column(name = "pseudo")
+    private String username;
+
     private String mail;
 
     /**
@@ -32,6 +34,10 @@ public class User {
      */
     public User() {
         this.id = -1;
+        this.adminLevel = -1;
+        this.username = "";
+        this.mail = "";
+        this.password = "";
     }
 
     /**
@@ -39,14 +45,14 @@ public class User {
      * @param id User's id
      * @param password User's password
      * @param adminLevel User's adminstrator level
-     * @param pseudo User's pseudonym
+     * @param username Username
      * @param mail User's mail address
      */
-    public User(int id, String password, int adminLevel, String pseudo, String mail) {
+    public User(int id, String password, int adminLevel, String username, String mail) {
         this.id = id;
         this.password = password;
         this.adminLevel = adminLevel;
-        this.pseudo = pseudo;
+        this.username = username;
         this.mail = mail;
     }
 
@@ -99,19 +105,19 @@ public class User {
     }
 
     /**
-     * User's pseudonym getter
-     * @return User's pseudonym
+     * Username getter
+     * @return Username
      */
-    public String getPseudo() {
-        return pseudo;
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * User's pseudonym setter
-     * @param pseudo New pseudonym
+     * Username setter
+     * @param username New username
      */
-    public void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
