@@ -1,6 +1,7 @@
 package com.cartowiki.webapp.usermanagement.service;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import javax.naming.AuthenticationException;
 import javax.naming.SizeLimitExceededException;
@@ -58,7 +59,10 @@ public class UserService implements UserDetailsService{
         if (this.isUsernameTaken(user.getUsername())) {
             throw new AuthenticationException("Username is already taken");
         }
-        if (this.isMailTaken(user.getMail())) {
+        else if (!this.isMailValid(user.getMail())) {
+            throw new AuthenticationException("Mail address is not valid");
+        }
+        else if (this.isMailTaken(user.getMail())) {
             throw new AuthenticationException("Mail address is already taken");
         }
         else if (this.checkFieldsSize(user)) {
@@ -102,5 +106,17 @@ public class UserService implements UserDetailsService{
         Optional<User> optUser = repository.findByMail(mail);
 
         return optUser.isPresent();
+    }
+
+    /**
+     * Check if the mail address is valid
+     * @param mail Mail address to check
+     * @return Is the mail address valid
+     */
+    public boolean isMailValid(String mail) {
+        // Regexp pattern from https://owasp.org/www-community/OWASP_Validation_Regex_Repository
+        String pattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}";
+
+        return Pattern.compile(pattern).matcher(mail).matches();
     }
 }
