@@ -5,15 +5,16 @@ import javax.naming.SizeLimitExceededException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.cartowiki.webapp.usermanagement.model.User;
-import com.cartowiki.webapp.usermanagement.model.request.*;
+import com.cartowiki.webapp.usermanagement.model.request.SignUpRequest;
 import com.cartowiki.webapp.usermanagement.service.UserService;
+import com.cartowiki.webapp.util.ResponseMaker;
 
 /**
  * Authentication requests manager
@@ -21,7 +22,7 @@ import com.cartowiki.webapp.usermanagement.service.UserService;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    UserService service;
+    private UserService service;
 
     /**
      * Autowired controller
@@ -35,25 +36,28 @@ public class AuthController {
     /**
      * Sign up endpoint
      * @param data User's data for sign up
-     * @return Response status code and message if error
      */
     @PostMapping("/signup")
-    public ResponseStatusException signUp(@RequestBody SignUpRequest data) {
+    public ResponseEntity<Object> signUp(@RequestBody SignUpRequest data){
+        ResponseEntity<Object> response;
+
         if (data.getUsername().equals("") || data.getMail().equals("") || data.getPassword().equals("")) {
-            return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some arguments are missing");
+            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Some arguments are missing", HttpStatus.BAD_REQUEST);
         }
         else {
             try {
                 // Create a new contributor
                 service.addUser(new User(data.getUsername(), data.getMail(), data.getPassword(), 0));
-                return new ResponseStatusException(HttpStatus.CREATED);
+                response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "New contributor created", HttpStatus.CREATED);
             }
             catch (SizeLimitExceededException e) {
-                return new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+                response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, e.getMessage(), HttpStatus.BAD_REQUEST);
             }
             catch (AuthenticationException e) {
-                return new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+                response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, e.getMessage(), HttpStatus.CONFLICT);
             }
         }
+
+        return response;
     }
 }
