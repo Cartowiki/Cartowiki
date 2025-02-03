@@ -14,6 +14,13 @@ public abstract class ResponseMaker {
     public static final String TOKEN = "token";
 
     /**
+     * No-argument constructor
+     */
+    private ResponseMaker() {
+        // Overwrite public default constructor to private one because ResponseMaker is a utility class
+    }
+
+    /**
      * Return a single value response for converting to JSON
      * @param key Key
      * @param value Value
