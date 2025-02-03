@@ -16,7 +16,7 @@ import com.cartowiki.webapp.usermanagement.model.request.*;
 import com.cartowiki.webapp.usermanagement.service.UserService;
 
 /**
- * Authentification requests manager
+ * Authentication requests manager
  */
 @RestController
 @RequestMapping("/auth")

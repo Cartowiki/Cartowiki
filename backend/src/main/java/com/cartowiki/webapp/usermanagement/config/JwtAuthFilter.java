@@ -18,7 +18,7 @@ import com.cartowiki.webapp.usermanagement.service.UserService;
 import java.io.IOException;
 
 /**
- * JWT Authentification filter chain
+ * JWT Authentication filter chain
  */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -27,7 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     /**
      * Autowired constructor
-     * @param jwtService Service for JWT authentification
+     * @param jwtService Service for JWT authentication
      * @param userService Service for user management
      */
     @Autowired

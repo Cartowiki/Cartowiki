@@ -31,7 +31,7 @@ public class SecurityConfig {
 
     /**
      * Autowired constructor
-     * @param authFilter Filter chain for JWT authentification
+     * @param authFilter Filter chain for JWT authentication
      * @param userService Service for user management
      */
     @Autowired
@@ -82,8 +82,8 @@ public class SecurityConfig {
     }
 
     /**
-     * Configure and return an authentification provider
-     * @return Configured authentification provider
+     * Configure and return an authentication provider
+     * @return Configured authentication provider
      */
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -94,9 +94,9 @@ public class SecurityConfig {
     }
 
     /**
-     * Return an authentification manager from the configuration
+     * Return an authentication manager from the configuration
      * @param config Authentication configuration
-     * @return Authentification manager
+     * @return Authentication manager
      * @throws Exception Error when return the manager from the configuration
      */
     @Bean

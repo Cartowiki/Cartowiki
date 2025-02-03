@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Service for JWT Authentification
+ * Service for JWT Authentication
  */
 @Component
 public class JwtService {

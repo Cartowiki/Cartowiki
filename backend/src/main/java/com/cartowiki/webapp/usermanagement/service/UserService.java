@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService{
      * @param user User to save
      * @return Instance of the saved user
      * @throws SizeLimitExceededException One field doesn't respect the database's limitations
-     * @throws AuthentificationException Username is already taken
+     * @throws AuthenticationException Username is already taken
      */
     public User addUser(User user) throws SizeLimitExceededException, AuthenticationException {
         BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder();
