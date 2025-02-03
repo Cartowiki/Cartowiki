@@ -33,23 +33,17 @@ public class User {
      * No-argument constructor
      */
     public User() {
-        this.id = -1;
-        this.adminLevel = -1;
-        this.username = "";
-        this.mail = "";
-        this.password = "";
+        // All variables are set to their type's default value
     }
 
     /**
-     * Full-argument constructor
-     * @param id User's id
-     * @param password User's password
-     * @param adminLevel User's adminstrator level
+     * Constructor with arguments
      * @param username Username
      * @param mail User's mail address
+     * @param password User's password
+     * @param adminLevel User's adminstrator level
      */
-    public User(int id, String password, int adminLevel, String username, String mail) {
-        this.id = id;
+    public User(String username, String mail, String password, int adminLevel) {
         this.password = password;
         this.adminLevel = adminLevel;
         this.username = username;
