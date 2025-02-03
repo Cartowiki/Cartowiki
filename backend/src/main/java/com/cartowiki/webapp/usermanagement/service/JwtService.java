@@ -2,35 +2,32 @@ package com.cartowiki.webapp.usermanagement.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
+
+import javax.crypto.SecretKey;
 
 /**
  * Service for JWT Authentication
  */
-@Component
+@Service
 public class JwtService {
     // Mock secret
-    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    private static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    private static final long EXPIRATION_TIME = 1800000; // 30 minutes
+    private static final SecretKey SIGNING_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     /**
      * Generate token with given user name
      * @param userName User's name
      * @return Token
      */
-    public String generateToken(String userName) {
-        Map<String, Object> claims = new HashMap<>();
-        
-        return createToken(claims, userName);
+    public String generateToken(String userName) {        
+        return createToken(userName);
     }
 
     /**
@@ -39,23 +36,13 @@ public class JwtService {
      * @param userName User's name
      * @return JWT token
      */
-    private String createToken(Map<String, Object> claims, String userName) {
+    private String createToken(String userName) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(userName)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // Token valid for 30 minutes
-                .signWith(getSignKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    /**
-     * Get the signing key for JWT token
-     * @return Signing key
-     */
-    private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
-        return Keys.hmacShaKeyFor(keyBytes);
+               .subject(userName)
+               .issuedAt(new Date(System.currentTimeMillis()))
+               .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+               .signWith(SIGNING_KEY)
+               .compact();
     }
 
     /**
@@ -93,11 +80,11 @@ public class JwtService {
      * @return All claims
      */
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return Jwts.parser()
+                   .verifyWith(SIGNING_KEY)
+                   .build()
+                   .parseSignedClaims(token)
+                   .getPayload();
     }
 
     /**
