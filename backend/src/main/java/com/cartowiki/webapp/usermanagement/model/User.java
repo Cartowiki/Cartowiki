@@ -1,5 +1,12 @@
 package com.cartowiki.webapp.usermanagement.model;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +19,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "Utilisateurs")
-public class User {
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_utilisateur")
@@ -70,6 +77,7 @@ public class User {
      * User's password getter
      * @return User's password
      */
+    @Override
     public String getPassword() {
         return password;
     }
@@ -102,6 +110,7 @@ public class User {
      * Username getter
      * @return Username
      */
+    @Override
     public String getUsername() {
         return username;
     }
@@ -128,5 +137,50 @@ public class User {
      */
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    /**
+     * Determine roles of the user depending on the adminLevel
+     * @return Collection of roles
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_CONTRIBUTOR"));
+    }
+
+    /**
+     * Check if the account is not expired (no expiration yet)
+     * @return Is the account not expired
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    /**
+     * Check if the account is not locked (no lock yet)
+     * @return Is the account not locked
+     */
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    /**
+     * Check f the account's credentials are not expired (no expiration yet)
+     * @return Is the credential not expired
+     */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    /**
+     * Check if the account is enabled
+     * @return Is the account enabled
+     */
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

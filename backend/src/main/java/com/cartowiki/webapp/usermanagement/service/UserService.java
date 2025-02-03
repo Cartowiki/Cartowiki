@@ -6,6 +6,9 @@ import javax.naming.SizeLimitExceededException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.cartowiki.webapp.usermanagement.model.User;
@@ -15,7 +18,7 @@ import com.cartowiki.webapp.usermanagement.repository.UserRepository;
  * Operations on User instances
  */
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{
     @Autowired
     UserRepository repository;
 
@@ -50,5 +53,16 @@ public class UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> optUser = repository.findByUsername(username);
+
+        if (optUser.isEmpty()) {
+            throw new UsernameNotFoundException("User " + username + " not found");
+        }
+
+        return optUser.get();
     }
 }

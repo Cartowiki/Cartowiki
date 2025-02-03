@@ -1,5 +1,7 @@
 package com.cartowiki.webapp.usermanagement.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +12,10 @@ import com.cartowiki.webapp.usermanagement.model.User;
  */
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
-
+    /**
+     * Search a user by its username
+     * @param username Username
+     * @return Optional user, might be empty if not found
+     */
+    Optional<User> findByUsername(String username);
 }
