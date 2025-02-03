@@ -18,4 +18,11 @@ public interface UserRepository extends CrudRepository<User, Integer> {
      * @return Optional user, might be empty if not found
      */
     Optional<User> findByUsername(String username);
+
+    /**
+     * Search a user by its mail
+     * @param mail Mail address
+     * @return Optional user, might be empty if not found
+     */
+    Optional<User> findByMail(String mail);
 }

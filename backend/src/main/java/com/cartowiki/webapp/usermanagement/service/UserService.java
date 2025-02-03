@@ -58,6 +58,9 @@ public class UserService implements UserDetailsService{
         if (this.isUsernameTaken(user.getUsername())) {
             throw new AuthenticationException("Username is already taken");
         }
+        if (this.isMailTaken(user.getMail())) {
+            throw new AuthenticationException("Mail address is already taken");
+        }
         else if (this.checkFieldsSize(user)) {
             user = repository.save(user);
         }
@@ -86,6 +89,17 @@ public class UserService implements UserDetailsService{
      */
     public boolean isUsernameTaken(String username) {
         Optional<User> optUser = repository.findByUsername(username);
+
+        return optUser.isPresent();
+    }
+
+    /**
+     * Check if a mail address is in the database
+     * @param mail Mail address to search for
+     * @return Is the mail address in the database
+     */
+    public boolean isMailTaken(String mail) {
+        Optional<User> optUser = repository.findByMail(mail);
 
         return optUser.isPresent();
     }
