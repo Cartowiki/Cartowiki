@@ -5,7 +5,7 @@ package com.cartowiki.webapp.usermanagement.model.request;
  */
 public class SignUpRequest {
     private String username;
-    private String mail;
+    private String email;
     private String password;
     
     /**
@@ -13,7 +13,7 @@ public class SignUpRequest {
      */
     public SignUpRequest() {
         this.username = "";
-        this.mail = "";
+        this.email = "";
         this.password = "";
     }
 
@@ -34,19 +34,19 @@ public class SignUpRequest {
     }
 
     /**
-     * Mail address getter
-     * @return Current mail address
+     * Email address getter
+     * @return Current email address
      */
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
     /**
-     * Mail address setter
-     * @param mail New mail address
+     * Email address setter
+     * @param email New email address
      */
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**

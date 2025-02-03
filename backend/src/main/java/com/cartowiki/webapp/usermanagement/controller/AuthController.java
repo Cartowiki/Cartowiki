@@ -53,13 +53,13 @@ public class AuthController {
     public ResponseEntity<Object> signUp(@RequestBody SignUpRequest data){
         ResponseEntity<Object> response;
 
-        if (data.getUsername().equals("") || data.getMail().equals("") || data.getPassword().equals("")) {
+        if (data.getUsername().equals("") || data.getEmail().equals("") || data.getPassword().equals("")) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Some arguments are missing", HttpStatus.BAD_REQUEST);
         }
         else {
             try {
                 // Create a new contributor
-                service.addUser(new User(data.getUsername(), data.getMail(), data.getPassword(), 0));
+                service.addUser(new User(data.getUsername(), data.getEmail(), data.getPassword(), 0));
                 response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "New contributor created", HttpStatus.CREATED);
             }
             catch (SizeLimitExceededException e) {
