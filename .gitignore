@@ -1,3 +1,14 @@
+.env
+.DS_Store
+.idea/
+.vscode/
+*.tmp
+backend/target/
+frontend/.angular/
+frontend/.vscode/
+frontend/node_modules/
+frontend/dist/
+
 # Compiled class file
 *.class
 target/
