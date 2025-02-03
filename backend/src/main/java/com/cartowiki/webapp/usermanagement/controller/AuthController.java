@@ -4,6 +4,7 @@ import javax.naming.SizeLimitExceededException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +21,16 @@ import com.cartowiki.webapp.usermanagement.service.UserService;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    @Autowired
     UserService service;
+
+    /**
+     * Autowired controller
+     * @param service Service for user management
+     */
+    @Autowired
+    public AuthController(UserService service) {
+        this.service = service;
+    }
 
     /**
      * Sign up endpoint
@@ -39,8 +48,8 @@ public class AuthController {
                 service.addUser(new User(data.getUsername(), data.getMail(), data.getPassword(), 0));
                 return new ResponseStatusException(HttpStatus.CREATED);
             }
-            catch (SizeLimitExceededException e) {
-                return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some arguments are too long");
+            catch (UsernameNotFoundException e) {
+                return new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
             }
         }
     }

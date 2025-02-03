@@ -19,8 +19,16 @@ import com.cartowiki.webapp.usermanagement.repository.UserRepository;
  */
 @Service
 public class UserService implements UserDetailsService{
-    @Autowired
     UserRepository repository;
+
+    /**
+     * Autowired constructor
+     * @param repository Repository for Users
+     */
+    @Autowired
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
 
     /**
      * Check for the string fields' size according to the database restrictions :

@@ -26,8 +26,19 @@ import com.cartowiki.webapp.usermanagement.service.UserService;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    @Autowired
     private JwtAuthFilter authFilter;
+    private UserService userService;
+
+    /**
+     * Autowired constructor
+     * @param authFilter Filter chain for JWT authentification
+     * @param userService Service for user management
+     */
+    @Autowired
+    public SecurityConfig(JwtAuthFilter authFilter, UserService userService) {
+        this.authFilter = authFilter;
+        this.userService = userService;
+    }
 
     /**
      * Return a new instance of UserService
@@ -35,7 +46,7 @@ public class SecurityConfig {
      */
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserService();
+        return this.userService;
     }
 
     /**

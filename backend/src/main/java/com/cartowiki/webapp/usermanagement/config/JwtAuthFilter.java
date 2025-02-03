@@ -22,13 +22,20 @@ import java.io.IOException;
  */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
-
-    @Autowired
     private JwtService jwtService;
-
-    @Autowired
     private UserService userService;
-    
+
+    /**
+     * Autowired constructor
+     * @param jwtService Service for JWT authentification
+     * @param userService Service for user management
+     */
+    @Autowired
+    public JwtAuthFilter(JwtService jwtService, UserService userService) {
+        this.jwtService = jwtService;
+        this.userService = userService;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // Retrieve the Authorization header
