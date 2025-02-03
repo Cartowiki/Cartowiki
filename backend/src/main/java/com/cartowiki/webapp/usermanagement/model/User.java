@@ -34,7 +34,8 @@ public class User implements UserDetails{
     @Column(name = "pseudo")
     private String username;
 
-    private String mail;
+    @Column(name = "mail")
+    private String email;
 
     /**
      * No-argument constructor
@@ -46,15 +47,15 @@ public class User implements UserDetails{
     /**
      * Constructor with arguments
      * @param username Username
-     * @param mail User's mail address
+     * @param email User's email address
      * @param password User's password
      * @param adminLevel User's adminstrator level
      */
-    public User(String username, String mail, String password, int adminLevel) {
+    public User(String username, String email, String password, int adminLevel) {
         this.password = password;
         this.adminLevel = adminLevel;
         this.username = username;
-        this.mail = mail;
+        this.email = email;
     }
 
     /**
@@ -124,19 +125,19 @@ public class User implements UserDetails{
     }
 
     /**
-     * User's mail address getter
-     * @return User's mail address
+     * User's email address getter
+     * @return User's email address
      */
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
     /**
-     * User's mail address setter
-     * @param mail New mail address
+     * User's email address setter
+     * @param email New email address
      */
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**

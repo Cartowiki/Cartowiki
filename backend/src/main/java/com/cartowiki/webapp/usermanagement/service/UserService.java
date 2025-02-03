@@ -34,14 +34,14 @@ public class UserService implements UserDetailsService{
 
     /**
      * Check for the string fields' size according to the database restrictions :
-     *  - mail : 128 char. max.
+     *  - email : 128 char. max.
      *  - username : 32 char. max.
      *  - passwordHash : 128 char. max.
      * @param user User instance to check
      * @return Flag if all the fields' sizes are legit
      */
     public boolean checkFieldsSize(User user) {
-        return user.getMail().length() <= 128 && user.getUsername().length() <= 32 && user.getPassword().length() <= 128;
+        return user.getEmail().length() <= 128 && user.getUsername().length() <= 32 && user.getPassword().length() <= 128;
     }
 
     /**
@@ -59,11 +59,11 @@ public class UserService implements UserDetailsService{
         if (this.isUsernameTaken(user.getUsername())) {
             throw new AuthenticationException("Username is already taken");
         }
-        else if (!this.isMailValid(user.getMail())) {
-            throw new AuthenticationException("Mail address is not valid");
+        else if (!this.isEmailValid(user.getEmail())) {
+            throw new AuthenticationException("Email address is not valid");
         }
-        else if (this.isMailTaken(user.getMail())) {
-            throw new AuthenticationException("Mail address is already taken");
+        else if (this.isEmailTaken(user.getEmail())) {
+            throw new AuthenticationException("Email address is already taken");
         }
         else if (this.checkFieldsSize(user)) {
             user = repository.save(user);
@@ -98,25 +98,25 @@ public class UserService implements UserDetailsService{
     }
 
     /**
-     * Check if a mail address is in the database
-     * @param mail Mail address to search for
-     * @return Is the mail address in the database
+     * Check if a email address is in the database
+     * @param email Email address to search for
+     * @return Is the email address in the database
      */
-    public boolean isMailTaken(String mail) {
-        Optional<User> optUser = repository.findByMail(mail);
+    public boolean isEmailTaken(String email) {
+        Optional<User> optUser = repository.findByEmail(email);
 
         return optUser.isPresent();
     }
 
     /**
-     * Check if the mail address is valid
-     * @param mail Mail address to check
-     * @return Is the mail address valid
+     * Check if the email address is valid
+     * @param email Email address to check
+     * @return Is the email address valid
      */
-    public boolean isMailValid(String mail) {
+    public boolean isEmailValid(String email) {
         // Regexp pattern from https://owasp.org/www-community/OWASP_Validation_Regex_Repository
         String pattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}";
 
-        return Pattern.compile(pattern).matcher(mail).matches();
+        return Pattern.compile(pattern).matcher(email).matches();
     }
 }
