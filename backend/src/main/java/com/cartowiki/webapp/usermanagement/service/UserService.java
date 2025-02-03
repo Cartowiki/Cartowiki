@@ -2,6 +2,7 @@ package com.cartowiki.webapp.usermanagement.service;
 
 import java.util.Optional;
 
+import javax.naming.AuthenticationException;
 import javax.naming.SizeLimitExceededException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,21 +44,25 @@ public class UserService implements UserDetailsService{
     }
 
     /**
-     * Save a new or existing user in the database
+     * Save a new user in the database
      * @param user User to save
      * @return Instance of the saved user
      * @throws SizeLimitExceededException One field doesn't respect the database's limitations
+     * @throws AuthentificationException Username is already taken
      */
-    public User addUser(User user) throws SizeLimitExceededException {
+    public User addUser(User user) throws SizeLimitExceededException, AuthenticationException {
         BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder();
         
         user.setPassword(bCryptEncoder.encode(user.getPassword()));
 
-        if (this.checkFieldsSize(user)) {
+        if (this.isUsernameTaken(user.getUsername())) {
+            throw new AuthenticationException("Username is already taken");
+        }
+        else if (this.checkFieldsSize(user)) {
             user = repository.save(user);
         }
         else {
-            throw new SizeLimitExceededException("One field doesn't respect the database's limitations");
+            throw new SizeLimitExceededException("One argument is too long");
         }
 
         return user;
@@ -72,5 +77,16 @@ public class UserService implements UserDetailsService{
         }
 
         return optUser.get();
+    }
+
+    /**
+     * Check if a username is in the database
+     * @param username Username to search for
+     * @return Is the username in the database
+     */
+    public boolean isUsernameTaken(String username) {
+        Optional<User> optUser = repository.findByUsername(username);
+
+        return optUser.isPresent();
     }
 }

@@ -1,10 +1,10 @@
 package com.cartowiki.webapp.usermanagement.controller;
 
+import javax.naming.AuthenticationException;
 import javax.naming.SizeLimitExceededException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,8 +48,11 @@ public class AuthController {
                 service.addUser(new User(data.getUsername(), data.getMail(), data.getPassword(), 0));
                 return new ResponseStatusException(HttpStatus.CREATED);
             }
-            catch (UsernameNotFoundException e) {
+            catch (SizeLimitExceededException e) {
                 return new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            }
+            catch (AuthenticationException e) {
+                return new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
             }
         }
     }
