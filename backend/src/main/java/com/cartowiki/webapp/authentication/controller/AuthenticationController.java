@@ -81,14 +81,23 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<Object> authenticateAndGetToken(@RequestBody LogInRequest data) {
         ResponseEntity<Object> response;
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword())
-        );
+        
+        if (data.getUsername().equals("")) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing username", HttpStatus.BAD_REQUEST);
+        }
+        else if (data.getPassword().equals("")) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing password", HttpStatus.BAD_REQUEST);
+        }
+        else {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword())
+            );
 
-        if (authentication.isAuthenticated()) {
-            response = ResponseMaker.singleValueResponse(ResponseMaker.TOKEN, jwtService.generateToken(data.getUsername()), HttpStatus.CREATED);
-        } else {
-            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Invalid credentials", HttpStatus.UNAUTHORIZED);
+            if (authentication.isAuthenticated()) {
+                response = ResponseMaker.singleValueResponse(ResponseMaker.TOKEN, jwtService.generateToken(data.getUsername()), HttpStatus.CREATED);
+            } else {
+                response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Invalid credentials", HttpStatus.UNAUTHORIZED);
+            }
         }
 
         return response;
