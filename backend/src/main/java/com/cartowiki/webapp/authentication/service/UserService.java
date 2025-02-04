@@ -55,7 +55,7 @@ public class UserService implements UserDetailsService{
             throw new SizeLimitExceededException("Email is too long");
         }
         else if (user.getPassword().length() > databaseConfig.getPasswordMaxLength()) {
-            throw new SizeLimitExceededException("Username is too long");
+            throw new SizeLimitExceededException("Password is too long");
         }
         else if (this.isUsernameTaken(user.getUsername())) {
             throw new AuthenticationException("Username is already taken");
