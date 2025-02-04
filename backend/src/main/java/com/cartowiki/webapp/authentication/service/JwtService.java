@@ -3,8 +3,12 @@ package com.cartowiki.webapp.authentication.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.cartowiki.webapp.authentication.config.JwtConfig;
 
 import java.util.Date;
 import java.util.function.Function;
@@ -16,10 +20,18 @@ import javax.crypto.SecretKey;
  */
 @Service
 public class JwtService {
-    // Mock secret
-    private static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-    private static final long EXPIRATION_TIME = 1800000; // 30 minutes
-    private static final SecretKey SIGNING_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
+    private JwtConfig jwtConfig;
+    private SecretKey signingKey;
+
+    /**
+     * Autowired constructor
+     * @param jwtConfig JWT parameters
+     */
+    @Autowired
+    public JwtService(JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
+        this.signingKey = Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes());
+    }
 
     /**
      * Generate token with given user name
@@ -40,8 +52,8 @@ public class JwtService {
         return Jwts.builder()
                .subject(userName)
                .issuedAt(new Date(System.currentTimeMillis()))
-               .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-               .signWith(SIGNING_KEY)
+               .expiration(new Date(System.currentTimeMillis() + jwtConfig.getExpirationTime()))
+               .signWith(signingKey)
                .compact();
     }
 
@@ -81,7 +93,7 @@ public class JwtService {
      */
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                   .verifyWith(SIGNING_KEY)
+                   .verifyWith(signingKey)
                    .build()
                    .parseSignedClaims(token)
                    .getPayload();
