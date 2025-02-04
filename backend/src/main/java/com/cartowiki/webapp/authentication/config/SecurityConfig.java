@@ -3,6 +3,8 @@ package com.cartowiki.webapp.authentication.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -105,5 +107,16 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    /**
+     * Defining roles hierarchy
+     * @return Role hierarchy
+     */
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        String hierarchy = "ROLE_ADMINISTRATOR > ROLE_CONTRIBUTOR";
+
+        return RoleHierarchyImpl.fromHierarchy(hierarchy);
     }
 }
