@@ -53,8 +53,14 @@ public class AuthenticationController {
     public ResponseEntity<Object> signUp(@RequestBody SignUpRequest data){
         ResponseEntity<Object> response;
 
-        if (data.getUsername().equals("") || data.getEmail().equals("") || data.getPassword().equals("")) {
-            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Some arguments are missing", HttpStatus.BAD_REQUEST);
+        if (data.getUsername().equals("")) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing username", HttpStatus.BAD_REQUEST);
+        }
+        else if (data.getEmail().equals("")) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing email", HttpStatus.BAD_REQUEST);
+        }
+        else if (data.getPassword().equals("")) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing password", HttpStatus.BAD_REQUEST);
         }
         else {
             try {

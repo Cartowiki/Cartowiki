@@ -21,7 +21,11 @@ import com.cartowiki.webapp.authentication.repository.UserRepository;
  */
 @Service
 public class UserService implements UserDetailsService{
-    UserRepository repository;
+    private static final int PASSWORD_MAX_LENGTH = 128;
+    private static final int USERNAME_MAX_LENGTH = 32;
+    private static final int EMAIL_MAX_LENGTH = 128;
+    
+    private UserRepository repository;
 
     /**
      * Autowired constructor
@@ -30,18 +34,6 @@ public class UserService implements UserDetailsService{
     @Autowired
     public UserService(UserRepository repository) {
         this.repository = repository;
-    }
-
-    /**
-     * Check for the string fields' size according to the database restrictions :
-     *  - email : 128 char. max.
-     *  - username : 32 char. max.
-     *  - passwordHash : 128 char. max.
-     * @param user User instance to check
-     * @return Flag if all the fields' sizes are legit
-     */
-    public boolean checkFieldsSize(User user) {
-        return user.getEmail().length() <= 128 && user.getUsername().length() <= 32 && user.getPassword().length() <= 128;
     }
 
     /**
@@ -56,7 +48,16 @@ public class UserService implements UserDetailsService{
         
         user.setPassword(bCryptEncoder.encode(user.getPassword()));
 
-        if (this.isUsernameTaken(user.getUsername())) {
+        if (user.getUsername().length() > USERNAME_MAX_LENGTH) {
+            throw new SizeLimitExceededException("Username is too long");
+        }
+        else if (user.getEmail().length() > EMAIL_MAX_LENGTH) {
+            throw new SizeLimitExceededException("Email is too long");
+        }
+        else if (user.getPassword().length() > PASSWORD_MAX_LENGTH) {
+            throw new SizeLimitExceededException("Username is too long");
+        }
+        else if (this.isUsernameTaken(user.getUsername())) {
             throw new AuthenticationException("Username is already taken");
         }
         else if (!this.isEmailValid(user.getEmail())) {
@@ -65,11 +66,8 @@ public class UserService implements UserDetailsService{
         else if (this.isEmailTaken(user.getEmail())) {
             throw new AuthenticationException("Email address is already taken");
         }
-        else if (this.checkFieldsSize(user)) {
-            user = repository.save(user);
-        }
         else {
-            throw new SizeLimitExceededException("One argument is too long");
+            user = repository.save(user);
         }
 
         return user;
@@ -114,8 +112,9 @@ public class UserService implements UserDetailsService{
      * @return Is the email address valid
      */
     public boolean isEmailValid(String email) {
-        // Regexp pattern from https://owasp.org/www-community/OWASP_Validation_Regex_Repository
-        String pattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}";
+        // Inspired from https://owasp.org/www-community/OWASP_Validation_Regex_Repository
+        // Edit : limit the number of repetitions in the address
+        String pattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+){0,10}@(?:[a-zA-Z0-9-]+\\.){0,10}[a-zA-Z]{2,7}";
 
         return Pattern.compile(pattern).matcher(email).matches();
     }
