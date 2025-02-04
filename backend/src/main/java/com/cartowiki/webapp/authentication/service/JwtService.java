@@ -39,20 +39,30 @@ public class JwtService {
      * @return Token
      */
     public String generateToken(String userName) {        
-        return createToken(userName);
+        return createToken(userName, jwtConfig.getExpirationTime());
+    }
+
+    /**
+     * Generate token with given user name and custom expiration time
+     * @param userName User's name
+     * @param expirationTime Time until expiration
+     * @return Token
+     */
+    public String generateToken(String userName, long expirationTime) {        
+        return createToken(userName, expirationTime);
     }
 
     /**
      * Create a JWT token with specified claims and subject (user name)
-     * @param claims Claims
      * @param userName User's name
+     * @param expirationTime Time until expiration
      * @return JWT token
      */
-    private String createToken(String userName) {
+    private String createToken(String userName, long expirationTime) {
         return Jwts.builder()
                .subject(userName)
                .issuedAt(new Date(System.currentTimeMillis()))
-               .expiration(new Date(System.currentTimeMillis() + jwtConfig.getExpirationTime()))
+               .expiration(new Date(System.currentTimeMillis() + expirationTime))
                .signWith(signingKey)
                .compact();
     }
@@ -81,7 +91,7 @@ public class JwtService {
      * @param claimsResolver Claims resolver
      * @return Claim
      */
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
