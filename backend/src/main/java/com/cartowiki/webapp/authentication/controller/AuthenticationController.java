@@ -100,7 +100,7 @@ public class AuthenticationController {
             );
 
             if (authentication.isAuthenticated()) {
-                response = ResponseMaker.singleValueResponse(ResponseMaker.TOKEN, jwtService.generateToken(data.getUsername()), HttpStatus.CREATED);
+                response = ResponseMaker.singleValueResponse(ResponseMaker.TOKEN, jwtService.generateToken(data.getUsername()), HttpStatus.ACCEPTED);
             } else {
                 response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Invalid credentials", HttpStatus.UNAUTHORIZED);
             }
