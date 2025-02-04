@@ -54,9 +54,7 @@ public class UserService implements UserDetailsService{
         else if (user.getEmail().length() > databaseConfig.getEmailMaxLength()) {
             throw new SizeLimitExceededException("Email is too long");
         }
-        else if (user.getPassword().length() > databaseConfig.getPasswordMaxLength()) {
-            throw new SizeLimitExceededException("Password is too long");
-        }
+        // Password size is not checked because bCrypt generate 60-character hash
         else if (this.isUsernameTaken(user.getUsername())) {
             throw new AuthenticationException("Username is already taken");
         }
@@ -89,7 +87,7 @@ public class UserService implements UserDetailsService{
      * @param username Username to search for
      * @return Is the username in the database
      */
-    public boolean isUsernameTaken(String username) {
+    private boolean isUsernameTaken(String username) {
         Optional<User> optUser = repository.findByUsername(username);
 
         return optUser.isPresent();
@@ -100,7 +98,7 @@ public class UserService implements UserDetailsService{
      * @param email Email address to search for
      * @return Is the email address in the database
      */
-    public boolean isEmailTaken(String email) {
+    private boolean isEmailTaken(String email) {
         Optional<User> optUser = repository.findByEmail(email);
 
         return optUser.isPresent();
@@ -111,7 +109,7 @@ public class UserService implements UserDetailsService{
      * @param email Email address to check
      * @return Is the email address valid
      */
-    public boolean isEmailValid(String email) {
+    private boolean isEmailValid(String email) {
         // Inspired from https://owasp.org/www-community/OWASP_Validation_Regex_Repository
         // Edit : limit the number of repetitions in the address
         String pattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+){0,10}@(?:[a-zA-Z0-9-]+\\.){0,10}[a-zA-Z]{2,7}";
