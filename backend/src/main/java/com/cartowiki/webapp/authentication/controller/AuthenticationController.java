@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.usermanagement.controller;
+package com.cartowiki.webapp.authentication.controller;
 
 import javax.naming.AuthenticationException;
 import javax.naming.SizeLimitExceededException;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cartowiki.webapp.usermanagement.model.User;
-import com.cartowiki.webapp.usermanagement.model.request.LogInRequest;
-import com.cartowiki.webapp.usermanagement.model.request.SignUpRequest;
-import com.cartowiki.webapp.usermanagement.service.JwtService;
-import com.cartowiki.webapp.usermanagement.service.UserService;
+import com.cartowiki.webapp.authentication.model.User;
+import com.cartowiki.webapp.authentication.model.request.LogInRequest;
+import com.cartowiki.webapp.authentication.model.request.SignUpRequest;
+import com.cartowiki.webapp.authentication.service.UserService;
+import com.cartowiki.webapp.authentication.service.JwtService;
 import com.cartowiki.webapp.util.ResponseMaker;
 
 /**
@@ -26,7 +26,7 @@ import com.cartowiki.webapp.util.ResponseMaker;
  */
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthenticationController {
     private UserService service;
     private JwtService jwtService;
     private AuthenticationManager authenticationManager;
@@ -38,7 +38,7 @@ public class AuthController {
      * @param authenticationManager Authentication Manager
      */
     @Autowired
-    public AuthController(UserService service, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthenticationController(UserService service, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.service = service;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;

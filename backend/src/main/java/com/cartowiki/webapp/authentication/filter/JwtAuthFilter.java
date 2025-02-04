@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.usermanagement.config;
+package com.cartowiki.webapp.authentication.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,8 +12,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.cartowiki.webapp.usermanagement.service.JwtService;
-import com.cartowiki.webapp.usermanagement.service.UserService;
+import com.cartowiki.webapp.authentication.service.UserService;
+import com.cartowiki.webapp.authentication.service.JwtService;
 
 import java.io.IOException;
 

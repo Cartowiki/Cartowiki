@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.usermanagement.model;
+package com.cartowiki.webapp.authentication.model;
 
 import java.util.Collection;
 import java.util.Collections;

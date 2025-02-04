@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.usermanagement.model.request;
+package com.cartowiki.webapp.authentication.model.request;
 
 /**
  * Data template for sign up requests

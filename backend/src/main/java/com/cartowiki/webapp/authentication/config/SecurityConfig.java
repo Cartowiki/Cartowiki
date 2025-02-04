@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.usermanagement.config;
+package com.cartowiki.webapp.authentication.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.cartowiki.webapp.usermanagement.service.UserService;
+import com.cartowiki.webapp.authentication.filter.JwtAuthFilter;
+import com.cartowiki.webapp.authentication.service.UserService;
 
 /**
  * Spring Security configurations

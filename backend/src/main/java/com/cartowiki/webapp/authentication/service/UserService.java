@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.usermanagement.service;
+package com.cartowiki.webapp.authentication.service;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.cartowiki.webapp.usermanagement.model.User;
-import com.cartowiki.webapp.usermanagement.repository.UserRepository;
+import com.cartowiki.webapp.authentication.model.User;
+import com.cartowiki.webapp.authentication.repository.UserRepository;
 
 /**
  * Operations on User instances

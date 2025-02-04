@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.usermanagement.service;
+package com.cartowiki.webapp.authentication.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
