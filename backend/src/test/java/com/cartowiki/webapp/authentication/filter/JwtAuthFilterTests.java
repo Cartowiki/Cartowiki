@@ -55,6 +55,7 @@ class JwtAuthFilterTests {
 
     /**
      * Test the authentication as being not authentified
+     * @throws Exception Error during results matching
      */
     @Test
     void testNotAuthentified() throws Exception{
@@ -67,6 +68,7 @@ class JwtAuthFilterTests {
 
     /**
      * Test the authentication as using another authentication than JWT
+     * @throws Exception Error during results matching
      */
     @Test
     void testNotJWT() throws Exception{
@@ -81,6 +83,7 @@ class JwtAuthFilterTests {
 
     /**
      * Test the authentication as being not authentified
+     * @throws Exception Error during results matching
      */
     @Test
     void testContributor() throws Exception{
@@ -97,6 +100,7 @@ class JwtAuthFilterTests {
 
     /**
      * Test the authentication with an expired token
+     * @throws Exception Error during results matching
      */
     @Test
     void testExpiredToken() throws Exception{
@@ -112,7 +116,8 @@ class JwtAuthFilterTests {
     }
 
     /**
-     * Test the authentication as being not authentified
+     * Test the authentication as being not 
+     * @throws Exception Error during results matching
      */
     @Test
     void testAdministrator() throws Exception{
