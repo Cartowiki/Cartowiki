@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.cartowiki.webapp.authentication.config.DatabaseConfig;
 import com.cartowiki.webapp.authentication.model.User;
 import com.cartowiki.webapp.authentication.repository.UserRepository;
 
@@ -20,20 +21,19 @@ import com.cartowiki.webapp.authentication.repository.UserRepository;
  * Operations on User instances
  */
 @Service
-public class UserService implements UserDetailsService{
-    private static final int PASSWORD_MAX_LENGTH = 128;
-    private static final int USERNAME_MAX_LENGTH = 32;
-    private static final int EMAIL_MAX_LENGTH = 128;
-    
+public class UserService implements UserDetailsService{    
+    private DatabaseConfig databaseConfig;
     private UserRepository repository;
 
     /**
      * Autowired constructor
      * @param repository Repository for Users
+     * @param databaseConfig Database restrictions
      */
     @Autowired
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, DatabaseConfig databaseConfig) {
         this.repository = repository;
+        this.databaseConfig = databaseConfig;
     }
 
     /**
@@ -48,13 +48,13 @@ public class UserService implements UserDetailsService{
         
         user.setPassword(bCryptEncoder.encode(user.getPassword()));
 
-        if (user.getUsername().length() > USERNAME_MAX_LENGTH) {
+        if (user.getUsername().length() > databaseConfig.getUsernameMaxLength()) {
             throw new SizeLimitExceededException("Username is too long");
         }
-        else if (user.getEmail().length() > EMAIL_MAX_LENGTH) {
+        else if (user.getEmail().length() > databaseConfig.getEmailMaxLength()) {
             throw new SizeLimitExceededException("Email is too long");
         }
-        else if (user.getPassword().length() > PASSWORD_MAX_LENGTH) {
+        else if (user.getPassword().length() > databaseConfig.getPasswordMaxLength()) {
             throw new SizeLimitExceededException("Username is too long");
         }
         else if (this.isUsernameTaken(user.getUsername())) {
