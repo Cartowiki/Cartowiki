@@ -7,9 +7,6 @@ WORKDIR /app
 # Copier tout le code source du backend dans l'image
 COPY . /app
 
-# Modifie le file ending de mvnw de Windows vers Linux
-RUN apt-get update && apt-get install -y dos2unix && dos2unix /app/mvnw
-
 # Donner les permissions d'exécution au wrapper mvnw
 RUN chmod +x mvnw
 
