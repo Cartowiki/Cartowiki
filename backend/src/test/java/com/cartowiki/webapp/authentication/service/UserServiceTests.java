@@ -29,7 +29,6 @@ class UserServiceTests {
     @Autowired
     DatabaseConfig config;
 
-    private User contributor;
     private User administrator;
 
     /**
@@ -45,11 +44,7 @@ class UserServiceTests {
      */
     @AfterAll
     void unpopulateDatabase() {
-        repository.delete(administrator);
-
-        if (contributor != null){
-            repository.delete(contributor);
-        } 
+        repository.deleteAll();
     }
 
     /**
@@ -73,7 +68,7 @@ class UserServiceTests {
 
         // Valid signup
         assertAll(() -> {
-            this.contributor = service.addUser(new User("wqNOM8H4NLUY9QMDOkwMPf9RDgvSd7zT", "wqNOM8H4NLUY9QMDOkwMPf@9RDgvSd7.zT", "pass", 0));
+            service.addUser(new User("wqNOM8H4NLUY9QMDOkwMPf9RDgvSd7zT", "wqNOM8H4NLUY9QMDOkwMPf@9RDgvSd7.zT", "pass", 0));
         });
     }
 

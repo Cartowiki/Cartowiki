@@ -49,8 +49,7 @@ class JwtAuthFilterTests {
      */
     @AfterAll
     void removeMockUsers() {
-        repository.delete(contributor);
-        repository.delete(administrator);
+        repository.deleteAll();
     }
 
     /**

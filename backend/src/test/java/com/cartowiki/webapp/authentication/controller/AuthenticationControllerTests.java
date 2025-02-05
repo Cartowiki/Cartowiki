@@ -56,7 +56,7 @@ class AuthenticationControllerTests {
      */
     @AfterAll
     void removeMockUsers() {
-        repository.delete(user);
+        repository.deleteAll();
     }
 
     /**
