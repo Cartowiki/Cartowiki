@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,13 +94,13 @@ public class AuthenticationController {
             response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing password", HttpStatus.BAD_REQUEST);
         }
         else {
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword())
-            );
+            try {
+                // If authentication fails, it will return an AuthenticationException
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword()));
 
-            if (authentication.isAuthenticated()) {
                 response = ResponseMaker.singleValueResponse(ResponseMaker.TOKEN, jwtService.generateToken(data.getUsername()), HttpStatus.ACCEPTED);
-            } else {
+            }
+            catch (org.springframework.security.core.AuthenticationException e) {
                 response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Invalid credentials", HttpStatus.UNAUTHORIZED);
             }
         }
