@@ -1,6 +1,10 @@
 package com.cartowiki.webapp.authentication.config;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -18,6 +22,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.cartowiki.webapp.authentication.filter.JwtAuthFilter;
 import com.cartowiki.webapp.authentication.service.UserService;
@@ -26,11 +33,14 @@ import com.cartowiki.webapp.authentication.service.UserService;
  * Spring Security configurations
  */
 @Configuration
+@ConfigurationProperties(prefix = "security")
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
     private JwtAuthFilter authFilter;
     private UserService userService;
+
+    private String corsUrl;
 
     /**
      * Autowired constructor
@@ -115,8 +125,43 @@ public class SecurityConfig {
      */
     @Bean
     public RoleHierarchy roleHierarchy() {
-        String hierarchy = "ROLE_ADMINISTRATOR > ROLE_CONTRIBUTOR";
+        String hierarchy = "ROLE_SUPERADMINISTRATOR > ROLE_ADMINISTRATOR > ROLE_CONTRIBUTOR";
 
         return RoleHierarchyImpl.fromHierarchy(hierarchy);
+    }
+
+    /**
+     * Create filter to allowed Cross-Origin Resources Sharing (CROS)
+     * @return
+     */
+    @Bean
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Collections.singletonList(this.corsUrl));
+        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
+        
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
+    }
+
+    /**
+     * Get Cross-origin Ressources Sharing (CROS) allowed origin
+     * @return Cross-origin Ressources Sharing (CROS) allowed origin
+     */
+    public String getCorsUrl() {
+        return corsUrl;
+    }
+
+    /**
+     * Set Cross-origin Ressources Sharing (CROS) allowed origin
+     * @return New Cross-origin Ressources Sharing (CROS) allowed origin
+     */
+    public void setCorsUrl(String corsUrl) {
+        this.corsUrl = corsUrl;
     }
 }
