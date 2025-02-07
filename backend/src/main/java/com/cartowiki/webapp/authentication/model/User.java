@@ -156,7 +156,7 @@ public class User implements UserDetails{
             case 1:
                 authorization = Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"));
                 break;
-
+            
             case 2:
                 authorization = Collections.singletonList(new SimpleGrantedAuthority("ROLE_SUPERADMINISTRATOR"));
                 break;

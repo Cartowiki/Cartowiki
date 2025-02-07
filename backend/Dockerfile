@@ -7,9 +7,6 @@ WORKDIR /app
 # Copier tout le code source du backend dans l'image
 COPY . /app
 
-# Modifie le file ending de mvnw de Windows vers Linux
-RUN apt-get update && apt-get install -y dos2unix && dos2unix /app/mvnw
-
 # Donner les permissions d'exécution au wrapper mvnw
 RUN chmod +x mvnw
 
@@ -24,9 +21,11 @@ WORKDIR /app
 
 # Copier le fichier JAR généré depuis l'étape précédente
 COPY --from=builder /app/target/webapp-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY ./wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x wait-for-it.sh
 
 # Assurez-vous que le JAR a les bonnes permissions
 RUN chmod +x /app/app.jar
 
-# Lancer l'application
-CMD ["java", "-jar", "app.jar"]
+# Définir l'entrypoint pour utiliser wait-for-it
+ENTRYPOINT ["/app/wait-for-it.sh", "postgis:5432", "--", "java", "-jar", "app.jar"]

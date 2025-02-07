@@ -1,0 +1,59 @@
+services:
+  postgis:
+    image: postgis/postgis:17-3.5
+    container_name: postgis
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis-data:/var/lib/postgresql/data
+      - ./init-data.backup:/docker-entrypoint-initdb.d/init-data.backup
+      - ./restore-data.sh:/docker-entrypoint-initdb.d/restore-data.sh
+
+  geoserver:
+    image: kartoza/geoserver
+    container_name: geoserver
+    restart: always
+    environment:
+      GEOSERVER_ADMIN_USER: ${GEOSERVER_ADMIN_USER}
+      GEOSERVER_ADMIN_PASSWORD: ${GEOSERVER_ADMIN_PASSWORD}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./geoserver/data_dir:/opt/geoserver/data_dir
+
+  spring-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: spring-backend
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      - postgis
+
+  angular:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    container_name: angular
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=${NODE_ENV}
+
+volumes:
+  postgis-data:
+  geoserver-data:
