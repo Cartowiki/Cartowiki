@@ -53,13 +53,13 @@ public class AuthenticationController {
         ResponseEntity<Object> response;
 
         if (data.getUsername().equals("")) {
-            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing username", HttpStatus.BAD_REQUEST);
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing username", HttpStatus.BAD_REQUEST);
         }
         else if (data.getEmail().equals("")) {
-            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing email", HttpStatus.BAD_REQUEST);
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing email", HttpStatus.BAD_REQUEST);
         }
         else if (data.getPassword().equals("")) {
-            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing password", HttpStatus.BAD_REQUEST);
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing password", HttpStatus.BAD_REQUEST);
         }
         else {
             try {
@@ -68,10 +68,10 @@ public class AuthenticationController {
                 response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "New contributor created", HttpStatus.CREATED);
             }
             catch (SizeLimitExceededException e) {
-                response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, e.getMessage(), HttpStatus.BAD_REQUEST);
+                response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, e.getMessage(), HttpStatus.BAD_REQUEST);
             }
             catch (AuthenticationException e) {
-                response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, e.getMessage(), HttpStatus.CONFLICT);
+                response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, e.getMessage(), HttpStatus.CONFLICT);
             }
         }
 
@@ -88,10 +88,10 @@ public class AuthenticationController {
         ResponseEntity<Object> response;
         
         if (data.getUsername().equals("")) {
-            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing username", HttpStatus.BAD_REQUEST);
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing username", HttpStatus.BAD_REQUEST);
         }
         else if (data.getPassword().equals("")) {
-            response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Missing password", HttpStatus.BAD_REQUEST);
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing password", HttpStatus.BAD_REQUEST);
         }
         else {
             try {
@@ -101,7 +101,7 @@ public class AuthenticationController {
                 response = ResponseMaker.singleValueResponse(ResponseMaker.TOKEN, jwtService.generateToken(data.getUsername()), HttpStatus.ACCEPTED);
             }
             catch (org.springframework.security.core.AuthenticationException e) {
-                response = ResponseMaker.singleValueResponse(ResponseMaker.ERROR, "Invalid credentials", HttpStatus.UNAUTHORIZED);
+                response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Invalid credentials", HttpStatus.UNAUTHORIZED);
             }
         }
 
