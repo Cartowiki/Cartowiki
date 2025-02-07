@@ -1,6 +1,8 @@
-<form>
-    <input type="text" name="username" id="username" placeholder="Nom d'utilisateur" required="required">
-    <input type="password" name="password" id="password" placeholder="Mot de passe" required="required">
+<form (ngSubmit)="logIn()">
+    <div [formGroup]="loginData">
+        <input type="text" name="username" id="username" placeholder="Nom d'utilisateur" required="required" formControlName="username">
+        <input type="password" name="password" id="password" placeholder="Mot de passe" required="required" formControlName="password">
 
-    <input type="submit" value="Se connecter">
+        <input type="submit" value="Se connecter">
+    </div>
 </form>
