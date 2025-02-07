@@ -21,9 +21,11 @@ WORKDIR /app
 
 # Copier le fichier JAR généré depuis l'étape précédente
 COPY --from=builder /app/target/webapp-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY ./wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x wait-for-it.sh
 
 # Assurez-vous que le JAR a les bonnes permissions
 RUN chmod +x /app/app.jar
 
-# Lancer l'application
-CMD ["java", "-jar", "app.jar"]
+# Définir l'entrypoint pour utiliser wait-for-it
+ENTRYPOINT ["/app/wait-for-it.sh", "postgis:5432", "--", "java", "-jar", "app.jar"]
