@@ -25,4 +25,17 @@ export class AuthenticationService {
 
     return this._httpClient.post(this._serverUrl + "/auth/login", data);
   }
+
+  /**
+   * Checks credentials with server for signup
+   * @param username Username
+   * @param email Email address
+   * @param password Password
+   * @returns Response from server
+   */
+  checkSignup(username: string, email: string, password: string): Observable<any> {
+    let data = {"username": username, "email": email, "password": password};
+
+    return this._httpClient.post(this._serverUrl + "/auth/signup", data);
+  }
 }
