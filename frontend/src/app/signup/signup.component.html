@@ -1,0 +1,9 @@
+<form (ngSubmit)="signUp()">
+    <div [formGroup]="signupData">
+        <input type="text" name="username" id="username" placeholder="Nom d'utilisateur" formControlName="username">
+        <input type="email" name="email" id="email" placeholder="Adresse mail" formControlName="email">
+        <input type="password" name="password" id="password" placeholder="Mot de passe" formControlName="password">
+
+        <input type="submit" value="Valider">
+    </div>
+</form>
