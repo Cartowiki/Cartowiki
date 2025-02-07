@@ -45,7 +45,7 @@ class UserTests {
         assertEquals("ROLE_ADMINISTRATOR", ((GrantedAuthority) admin.getAuthorities().toArray()[0]).getAuthority());
 
         // Test superadmin (not implemented yet)
-        assertTrue(superadmin.getAuthorities().isEmpty());
+        assertEquals("ROLE_SUPERADMINISTRATOR", ((GrantedAuthority) superadmin.getAuthorities().toArray()[0]).getAuthority());
 
         // Test other
         assertTrue(other.getAuthorities().isEmpty());
