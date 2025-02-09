@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.http.HttpMethod;
 
 import com.cartowiki.webapp.authentication.filter.JwtAuthFilter;
 import com.cartowiki.webapp.authentication.service.UserService;
@@ -73,17 +74,33 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/contributions", "/contributions/*", "/api/**").hasRole("CONTRIBUTOR")
-                .requestMatchers("/contributions/**","/users/**").hasRole("ADMINISTRATOR")
-                .anyRequest().authenticated() // Protect all other endpoints
+                // Public endpoints
+                .requestMatchers("/auth/signup", "/auth/login", "/geo", "/api/hello").permitAll()
+
+                // User management (ADMIN only)
+                .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/users/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/users/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
+
+                // Contribution management
+                .requestMatchers(HttpMethod.GET, "/contributions").hasAnyRole("CONTRIBUTOR", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/contributions/{id}").hasAnyRole("CONTRIBUTOR", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/contributions").hasAnyRole("CONTRIBUTOR", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/contributions/{id}").hasAnyRole("CONTRIBUTOR", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/contributions/{id}").hasAnyRole("CONTRIBUTOR", "ADMIN")
+
+                // Contribution validation (ADMIN only)
+                .requestMatchers(HttpMethod.POST, "/contributions/{id}/validate").hasRole("ADMIN")
+
+                // Protect all other endpoints
+                .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions
             )
             .authenticationProvider(authenticationProvider()) // Custom authentication provider
             .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
-
         return http.build();
     }
 

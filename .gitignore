@@ -9,8 +9,6 @@ frontend/.vscode/
 frontend/node_modules/
 frontend/dist/
 
-geoserver/data_dir/*
-
 # Compiled class file
 *.class
 target/
