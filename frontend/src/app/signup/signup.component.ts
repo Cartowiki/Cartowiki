@@ -35,13 +35,6 @@ export class SignupComponent implements OnInit {
     let email = this.signupData.value.email;
     let password = this.signupData.value.password;
 
-    this._auth.checkSignup(username, email, password).subscribe({
-      next: data => {
-          console.log(data.message);
-      },
-      error: error => {
-          console.warn(error.error.message);
-      }
-    });
+    this._auth.checkSignup(username, email, password);
   }
 }
