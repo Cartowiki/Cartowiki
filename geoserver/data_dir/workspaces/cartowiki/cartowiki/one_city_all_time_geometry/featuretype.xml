@@ -1,0 +1,63 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--2a4ed754:194ef118b51:-7f70</id>
+  <name>one_city_all_time_geometry</name>
+  <nativeName>one_city_all_time_geometry</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-642ad99f:194eaff9faf:-7ff5</id>
+  </namespace>
+  <title>one_city_all_time_geometry</title>
+  <keywords>
+    <string>features</string>
+    <string>one_city_all_time_geometry</string>
+  </keywords>
+  <srs>EPSG:404000</srs>
+  <nativeBoundingBox>
+    <minx>124.503159</minx>
+    <maxx>126.503159</maxx>
+    <miny>7.9892900000000004</miny>
+    <maxy>9.98929</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>124.503159</minx>
+    <maxx>126.503159</maxx>
+    <miny>7.9892900000000004</miny>
+    <maxy>9.98929</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>one_city_all_time_geometry</name>
+        <sql>SELECT * FROM get_one_city_geometries(%id_entite_ville%)
+</sql>
+        <escapeSql>false</escapeSql>
+        <geometry>
+          <name>position_ville</name>
+          <type>Geometry</type>
+          <srid>-1</srid>
+        </geometry>
+        <parameter>
+          <name>id_entite_ville</name>
+          <defaultValue>10</defaultValue>
+          <regexpValidator>^[\w\d\s]+$</regexpValidator>
+        </parameter>
+      </virtualTable>
+    </entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-642ad99f:194eaff9faf:-7ff4</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <simpleConversionEnabled>false</simpleConversionEnabled>
+  <internationalTitle/>
+  <internationalAbstract/>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

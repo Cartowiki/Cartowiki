@@ -1,0 +1,13 @@
+<layer>
+  <name>one_country_all_time_population</name>
+  <id>LayerInfoImpl--2a4ed754:194ef118b51:-7fec</id>
+  <type>VECTOR</type>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--2a4ed754:194ef118b51:-7fed</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2025-02-10 09:00:48.268 UTC</dateCreated>
+</layer>
