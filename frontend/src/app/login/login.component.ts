@@ -34,13 +34,6 @@ export class LoginComponent implements OnInit {
     let username = this.loginData.value.username;
     let password = this.loginData.value.password;
 
-    this._auth.checkLogin(username, password).subscribe({
-      next: data => {
-          console.log(data.token);
-      },
-      error: error => {
-          console.warn(error.error.message);
-      }
-    });
+    this._auth.checkLogin(username, password);
   }
 }
