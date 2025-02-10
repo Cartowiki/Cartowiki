@@ -1,0 +1,17 @@
+<layer>
+  <name>one_country_all_time_geometry</name>
+  <id>LayerInfoImpl--2a4ed754:194ef118b51:-7ffa</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-642ad99f:194eaff9faf:-7ffc</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--2a4ed754:194ef118b51:-7ffb</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2025-02-10 08:58:40.966 UTC</dateCreated>
+  <dateModified>2025-02-10 08:59:23.787 UTC</dateModified>
+</layer>

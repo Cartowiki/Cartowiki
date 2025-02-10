@@ -1,0 +1,74 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--2a4ed754:194ef118b51:-7ffb</id>
+  <name>one_country_all_time_geometry</name>
+  <nativeName>one_country_all_time_geometry</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-642ad99f:194eaff9faf:-7ff5</id>
+  </namespace>
+  <title>one_country_all_time_geometry</title>
+  <keywords>
+    <string>features</string>
+    <string>one_country_all_time_geometry</string>
+  </keywords>
+  <srs>EPSG:404000</srs>
+  <nativeBoundingBox>
+    <minx>-4.794846</minx>
+    <maxx>-0.368282</maxx>
+    <miny>46.860278</miny>
+    <maxy>49.728918</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-4.794846</minx>
+    <maxx>-0.368282</maxx>
+    <miny>46.860278</miny>
+    <maxy>49.728918</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="elevation">
+      <dimensionInfo>
+        <enabled>false</enabled>
+      </dimensionInfo>
+    </entry>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>one_country_all_time_geometry</name>
+        <sql>SELECT * FROM get_one_country_geometries(%id_entite_pays%)
+</sql>
+        <escapeSql>false</escapeSql>
+        <geometry>
+          <name>geometrie</name>
+          <type>Geometry</type>
+          <srid>-1</srid>
+        </geometry>
+        <parameter>
+          <name>id_entite_pays</name>
+          <defaultValue>7</defaultValue>
+          <regexpValidator>^[\w\d\s]+$</regexpValidator>
+        </parameter>
+      </virtualTable>
+    </entry>
+    <entry key="time">
+      <dimensionInfo>
+        <enabled>false</enabled>
+      </dimensionInfo>
+    </entry>
+    <entry key="cachingEnabled">false</entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-642ad99f:194eaff9faf:-7ff4</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <simpleConversionEnabled>false</simpleConversionEnabled>
+  <internationalTitle/>
+  <internationalAbstract/>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>
