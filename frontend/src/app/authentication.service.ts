@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TokenService } from './token.service';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private SERVER_URL = "http://postgis:8081";  // TODO : Use docker variable
+  private apiUrl = environment.API_URL;
 
   /**
    * Autowired constructor
@@ -23,7 +24,7 @@ export class AuthenticationService {
    * @returns Server's response
    */
   private postRequest(path: string, data: any): Observable<any> {
-    return this._httpClient.post(this.SERVER_URL + path, data);
+    return this._httpClient.post(this.apiUrl + path, data);
   }
 
   /**

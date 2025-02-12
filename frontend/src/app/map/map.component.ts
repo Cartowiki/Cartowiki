@@ -7,60 +7,43 @@ import * as L from 'leaflet';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
-
-  constructor() { }
+  private map!: L.Map;
+  private year: number = 2023; // Année par défaut
+  private cityLayer!: L.TileLayer;
 
   ngOnInit(): void {
-    // Créer la carte
-    const map = L.map('map', {
-      center: [51.505, -0.09],  // Coordonnées initiales de la carte
-      zoom: 3  // Niveau de zoom initial pour inclure plusieurs pays
+    this.initMap();
+    this.loadTiles(this.year);
+  }
+
+  private initMap(): void {
+    this.map = L.map('map', {
+      center: [20, 0], // Centrage optimisé
+      zoom: 3
     });
 
-    // Ajouter la couche OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    // ✅ Fond de carte OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(this.map);
+  }
 
-    // URL du service WFS pour les villes (GeoServer)
-    const wfsCitiesUrl = 'http://localhost:8080/geoserver/cartowiki/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=cartowiki:cities&outputFormat=application/json';
+  private loadTiles(year: number): void {
+    // ✅ Suppression des anciennes couches
+    if (this.cityLayer) this.map.removeLayer(this.cityLayer);
 
-    // URL du service WFS pour les pays (GeoServer)
-    const wfsCountriesUrl = 'http://localhost:8080/geoserver/cartowiki/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=cartowiki:countries&outputFormat=application/json';
+    // ✅ Utilisation de GeoWebCache (GWC) pour un chargement rapide
+    this.cityLayer = L.tileLayer(`http://localhost:8081/api/geoserver/tiles/cities/{year}/{z}/{x}/{y}.png`, {
+      tileSize: 256,
+      attribution: "© CartoWiki",
+      opacity: 0.7
+    }).addTo(this.map);
+  }
 
-    // Charger les données des pays en GeoJSON et les ajouter à la carte
-  //   fetch(wfsCountriesUrl)
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // Ajouter les pays (multipolygones) sur la carte
-  //       L.geoJSON(data, {
-  //         style: {
-  //           color: '#0000FF',  // Couleur des frontières des pays
-  //           weight: 2,
-  //           opacity: 1,
-  //           fillColor: '#0000FF',  // Couleur de remplissage des pays
-  //           fillOpacity: 0.3
-  //         }
-  //       }).addTo(map);
-  //     })
-  //     .catch(error => console.error('Erreur lors du chargement des pays:', error));
-
-  //   // Charger les données des villes en GeoJSON et les ajouter à la carte
-  //   fetch(wfsCitiesUrl)
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // Ajouter les points GeoJSON sur la carte pour les villes
-  //       L.geoJSON(data, {
-  //         pointToLayer: (feature, latlng) => {
-  //           return L.circleMarker(latlng, {
-  //             radius: 8,
-  //             fillColor: '#FF0000',  // Couleur du point
-  //             color: '#FFFFFF',      // Couleur du contour
-  //             weight: 2,             // Largeur du contour
-  //             opacity: 1,
-  //             fillOpacity: 0.8
-  //           });
-  //         }
-  //       }).addTo(map);
-  //     })
-  //     .catch(error => console.error('Erreur lors du chargement des villes:', error));
+  // ✅ Sélection dynamique de l'année pour changer les tuiles
+  public updateYear(event: Event): void {
+    const selectedYear = (event.target as HTMLSelectElement).value;
+    this.year = parseInt(selectedYear, 10);
+    this.loadTiles(this.year);
   }
 }

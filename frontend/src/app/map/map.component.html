@@ -1,1 +1,7 @@
-<div id="map" style="height: 600px;"></div>
+<div>
+  <label for="year">Sélectionner une année :</label>
+  <select id="year" (change)="updateYear($event)">
+    <option *ngFor="let y of [0, 1000, 2000]" [value]="y">{{ y }}</option>
+  </select>
+</div>
+<div id="map" style="height: 500px;"></div>
