@@ -27,6 +27,7 @@ services:
       - "8080:8080"
     volumes:
       - ./geoserver/data_dir:/opt/geoserver/data_dir
+      - ./geoserver/config/web.xml:/usr/local/tomcat/webapps/geoserver/WEB-INF/web.xml
     networks:
       - mynetwork
 
@@ -41,7 +42,8 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      SPRING_ALLOWED_CROS_ORIGIN: ${SPRING_ALLOWED_CROS_ORIGIN}
+      SPRING_ALLOWED_CROSS_ORIGIN: ${SPRING_ALLOWED_CROSS_ORIGIN}
+      GEOSERVER_URL: ${GEOSERVER_URL}
     depends_on:
       - postgis
     networks:

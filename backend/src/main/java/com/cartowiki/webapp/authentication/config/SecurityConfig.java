@@ -75,7 +75,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
-                .requestMatchers("/auth/signup", "/auth/login", "/geo", "/api/hello").permitAll()
+                .requestMatchers("/auth/signup", "/auth/login", "/api/geoserver/**").permitAll()
 
                 // User management (ADMIN only)
                 .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
