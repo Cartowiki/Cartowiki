@@ -61,6 +61,7 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=${NODE_ENV}
+      - API_URL=${API_URL}
     networks:
       - mynetwork
 

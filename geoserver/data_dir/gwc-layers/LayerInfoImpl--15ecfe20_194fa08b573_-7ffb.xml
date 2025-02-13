@@ -1,8 +1,8 @@
 <GeoServerTileLayer>
-  <id>LayerInfoImpl-68ac2c68:194ea3a2fdf:-7ef5</id>
+  <id>LayerInfoImpl--15ecfe20:194fa08b573:-7ffb</id>
   <enabled>true</enabled>
   <inMemoryCached>true</inMemoryCached>
-  <name>cartowiki:all_countries_one_time</name>
+  <name>cartowiki:all_cities_one_time</name>
   <mimeFormats>
     <string>application/vnd.mapbox-vector-tile</string>
     <string>image/png</string>
@@ -11,15 +11,47 @@
   <gridSubsets>
     <gridSubset>
       <gridSetName>EPSG:4326</gridSetName>
+      <extent>
+        <coords>
+          <double>-180.0</double>
+          <double>-85.06</double>
+          <double>180.0</double>
+          <double>85.06</double>
+        </coords>
+      </extent>
     </gridSubset>
     <gridSubset>
       <gridSetName>EPSG:900913</gridSetName>
+      <extent>
+        <coords>
+          <double>-2.003750834E7</double>
+          <double>-2.003750834E7</double>
+          <double>2.003750834E7</double>
+          <double>2.003750834E7</double>
+        </coords>
+      </extent>
     </gridSubset>
     <gridSubset>
       <gridSetName>WebMercatorQuad</gridSetName>
+      <extent>
+        <coords>
+          <double>-2.003750834E7</double>
+          <double>-2.0037508345578436E7</double>
+          <double>2.0037508342789244E7</double>
+          <double>2.003750834E7</double>
+        </coords>
+      </extent>
     </gridSubset>
     <gridSubset>
       <gridSetName>WebMercatorQuadx2</gridSetName>
+      <extent>
+        <coords>
+          <double>-2.003750834E7</double>
+          <double>-2.0037508345578436E7</double>
+          <double>2.0037508342789244E7</double>
+          <double>2.003750834E7</double>
+        </coords>
+      </extent>
     </gridSubset>
   </gridSubsets>
   <metaWidthHeight>
