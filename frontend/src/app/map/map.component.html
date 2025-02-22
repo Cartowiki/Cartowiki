@@ -4,4 +4,28 @@
     <option *ngFor="let y of [0, 1000, 2000]" [value]="y">{{ y }}</option>
   </select>
 </div>
-<div id="map" style="height: 500px;"></div>
+<div id="map" style="height: 500px;">
+  <script>
+    // create a map in the "map" div, set the view to a given place and zoom
+    var map = L.map('map').setView([51.505, -0.09], 13);
+    // add Leaflet-Geoman controls with some options to the map
+    map.pm.addControls({
+      position: 'topleft',
+      drawCircleMarker: false,
+      rotateMode: false,
+      drawCircleMarker: false,
+      drawCircle: false,
+      drawRectangle: false,
+      drawPolyline: false,
+    });
+
+    // add a marker in the given location, attach some popup content to it and open the popup
+    L.marker([51.5, -0.09]).addTo(map)
+      .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+      .openPopup();
+
+
+  </script>
+</div>
+
+

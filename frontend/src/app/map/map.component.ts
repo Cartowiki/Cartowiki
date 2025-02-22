@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
+import '@geoman-io/leaflet-geoman-free';
 
 @Component({
   selector: 'app-map',
