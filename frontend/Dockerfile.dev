@@ -7,7 +7,6 @@ RUN npm install
 COPY . ./
 
 RUN npm install -g @angular/cli
-RUN npm i @geoman-io/leaflet-geoman-free
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

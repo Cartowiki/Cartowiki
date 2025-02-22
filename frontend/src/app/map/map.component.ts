@@ -15,6 +15,7 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
     this.initMap();
     this.loadTiles(this.year);
+    this.addGeomanControls();
   }
 
   private initMap(): void {
@@ -39,6 +40,19 @@ export class MapComponent implements OnInit {
       attribution: "© CartoWiki",
       opacity: 0.7
     }).addTo(this.map);
+  }
+
+  private addGeomanControls(): void {
+    // Add Geoman controls to the map
+    this.map.pm.addControls({
+      position: 'topleft',
+      drawMarker: true,
+      drawPolygon: true,
+      editMode: true,
+      dragMode: true,
+      cutPolygon: true,
+      removalMode: true
+    });
   }
 
   // ✅ Sélection dynamique de l'année pour changer les tuiles
