@@ -20,6 +20,10 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Utilisateurs")
 public class User implements UserDetails{
+    public static final String CONTRIBUTOR = "CONTRIBUTOR";
+    public static final String ADMINISTRATOR = "ADMINISTRATOR";
+    public static final String SUPERADMINISTRATOR = "SUPERADMINISTRATOR";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_utilisateur")
@@ -147,18 +151,19 @@ public class User implements UserDetails{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<? extends GrantedAuthority> authorization;
+        String prefix = "ROLE_";
 
         switch (adminLevel) {
             case 0:
-                authorization = Collections.singletonList(new SimpleGrantedAuthority("ROLE_CONTRIBUTOR"));
+                authorization = Collections.singletonList(new SimpleGrantedAuthority(prefix + CONTRIBUTOR));
                 break;
         
             case 1:
-                authorization = Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"));
+                authorization = Collections.singletonList(new SimpleGrantedAuthority(prefix + ADMINISTRATOR));
                 break;
             
             case 2:
-                authorization = Collections.singletonList(new SimpleGrantedAuthority("ROLE_SUPERADMINISTRATOR"));
+                authorization = Collections.singletonList(new SimpleGrantedAuthority(prefix + SUPERADMINISTRATOR));
                 break;
 
             default:
