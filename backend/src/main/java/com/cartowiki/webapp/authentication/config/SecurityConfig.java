@@ -28,7 +28,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.http.HttpMethod;
 
 import com.cartowiki.webapp.authentication.filter.JwtAuthFilter;
-import com.cartowiki.webapp.authentication.service.UserService;
+import com.cartowiki.webapp.users.service.UserService;
 
 /**
  * Spring Security configurations

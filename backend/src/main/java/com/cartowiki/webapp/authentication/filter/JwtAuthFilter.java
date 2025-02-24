@@ -12,11 +12,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.cartowiki.webapp.authentication.service.UserService;
-
 import io.jsonwebtoken.ExpiredJwtException;
 
 import com.cartowiki.webapp.authentication.service.JwtService;
+import com.cartowiki.webapp.users.service.UserService;
 
 import java.io.IOException;
 

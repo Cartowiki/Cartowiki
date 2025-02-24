@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.authentication.model.request;
+package com.cartowiki.webapp.authentication.model;
 
 /**
  * Data template for log in requests
