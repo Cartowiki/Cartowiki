@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.authentication.service;
+package com.cartowiki.webapp.users.service;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,9 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.cartowiki.webapp.authentication.config.DatabaseConfig;
-import com.cartowiki.webapp.authentication.model.User;
-import com.cartowiki.webapp.authentication.repository.UserRepository;
+import com.cartowiki.webapp.users.config.DatabaseConfig;
+import com.cartowiki.webapp.users.model.User;
+import com.cartowiki.webapp.users.repository.UserRepository;
+
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.cartowiki.webapp.authentication.model.User;
+import com.cartowiki.webapp.users.model.User;
 
 /**
  * Tests for JWT tokens generation and checking

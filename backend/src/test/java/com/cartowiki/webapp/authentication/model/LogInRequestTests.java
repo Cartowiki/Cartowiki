@@ -1,4 +1,4 @@
-package com.cartowiki.webapp.authentication.model.request;
+package com.cartowiki.webapp.authentication.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
