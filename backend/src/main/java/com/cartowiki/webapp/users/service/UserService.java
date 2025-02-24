@@ -1,5 +1,6 @@
 package com.cartowiki.webapp.users.service;
 
+import java.util.MissingResourceException;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -8,6 +9,7 @@ import javax.naming.SizeLimitExceededException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -115,5 +117,27 @@ public class UserService implements UserDetailsService{
         String pattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+){0,10}@(?:[a-zA-Z0-9-]+\\.){0,10}[a-zA-Z]{2,7}";
 
         return Pattern.compile(pattern).matcher(email).matches();
+    }
+
+    /**
+     * Return a User from the database if it has less priviledges
+     * @param id User's id
+     * @param adminLevel Reference for adminLevel comparaison
+     * @return User
+     * @throws MissingResourceException User searched not found
+     * @throws AuthorizationDeniedException User has more priviledges than the reference
+     */
+    public User getLessAuthorizedUser(int id, int adminLevel) throws MissingResourceException, AuthorizationDeniedException {
+        Optional<User> optUser = repository.findById(id);
+
+        if (optUser.isEmpty()) {
+            throw new MissingResourceException("Missing user", "User", String.valueOf(id));
+        }
+        else if (optUser.get().getAdminLevel() > adminLevel) {
+            throw new AuthorizationDeniedException("Missing priviledge");
+        }
+        else {
+            return optUser.get();
+        }
     }
 }
