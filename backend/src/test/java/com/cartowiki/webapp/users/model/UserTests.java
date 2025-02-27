@@ -1,6 +1,7 @@
 package com.cartowiki.webapp.users.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -50,5 +51,40 @@ class UserTests {
 
         // Test other
         assertTrue(other.getAuthorities().isEmpty());
+    }
+
+    /**
+     * Test the test of privileges beetween users
+     */
+    @Test
+    void testHasEqualOrHigherPriviledgesThan() {
+        User contributor = new User(username, email, password, 0);
+        User admin = new User(username, email, password, 1);
+        User superadmin = new User(username, email, password, 2);
+        User unknown = new User(username, email, password, 999);
+        
+        // Contributor
+        assertTrue(contributor.hasEqualOrHigherPriviledgesThan(contributor));
+        assertFalse(contributor.hasEqualOrHigherPriviledgesThan(admin));
+        assertFalse(contributor.hasEqualOrHigherPriviledgesThan(superadmin));
+        assertFalse(contributor.hasEqualOrHigherPriviledgesThan(unknown));
+
+        // Administrator
+        assertTrue(admin.hasEqualOrHigherPriviledgesThan(contributor));
+        assertTrue(admin.hasEqualOrHigherPriviledgesThan(admin));
+        assertFalse(admin.hasEqualOrHigherPriviledgesThan(superadmin));
+        assertTrue(admin.hasEqualOrHigherPriviledgesThan(unknown));
+
+        // Superadministrator
+        assertTrue(superadmin.hasEqualOrHigherPriviledgesThan(contributor));
+        assertTrue(superadmin.hasEqualOrHigherPriviledgesThan(admin));
+        assertTrue(superadmin.hasEqualOrHigherPriviledgesThan(superadmin));
+        assertTrue(superadmin.hasEqualOrHigherPriviledgesThan(unknown));
+
+        // Unknown
+        assertFalse(unknown.hasEqualOrHigherPriviledgesThan(contributor));
+        assertFalse(unknown.hasEqualOrHigherPriviledgesThan(admin));
+        assertFalse(unknown.hasEqualOrHigherPriviledgesThan(superadmin));
+        assertFalse(unknown.hasEqualOrHigherPriviledgesThan(unknown));
     }
 }
