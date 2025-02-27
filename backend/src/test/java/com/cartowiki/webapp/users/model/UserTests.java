@@ -14,9 +14,16 @@ import org.springframework.security.core.GrantedAuthority;
  */
 @SpringBootTest
 class UserTests {
+    // Mock data
     private String username = "John";
     private String email = "john@domain.net";
     private String password = "P@ssw0rd!";
+
+    // Mock users
+    private User contributor = new User(username, email, password, 0);
+    private User admin = new User(username, email, password, 1);
+    private User superadmin = new User(username, email, password, 2);
+    private User unknown = new User(username, email, password, 999);
 
     /**
      * Test default constructor
@@ -35,34 +42,24 @@ class UserTests {
      */
     @Test
     void testGetAuthorities() {
-        User contributor = new User(username, email, password, 0);
-        User admin = new User(username, email, password, 1);
-        User superadmin = new User(username, email, password, 2);
-        User other = new User(username, email, password, 3);
-
         // Test contributor
-        assertEquals("ROLE_CONTRIBUTOR", ((GrantedAuthority) contributor.getAuthorities().toArray()[0]).getAuthority());
+        assertEquals("ROLE_" + User.CONTRIBUTOR, ((GrantedAuthority) contributor.getAuthorities().toArray()[0]).getAuthority());
 
         // Test admin
-        assertEquals("ROLE_ADMINISTRATOR", ((GrantedAuthority) admin.getAuthorities().toArray()[0]).getAuthority());
+        assertEquals("ROLE_" + User.ADMINISTRATOR, ((GrantedAuthority) admin.getAuthorities().toArray()[0]).getAuthority());
 
         // Test superadmin (not implemented yet)
-        assertEquals("ROLE_SUPERADMINISTRATOR", ((GrantedAuthority) superadmin.getAuthorities().toArray()[0]).getAuthority());
+        assertEquals("ROLE_" + User.SUPERADMINISTRATOR, ((GrantedAuthority) superadmin.getAuthorities().toArray()[0]).getAuthority());
 
         // Test other
-        assertTrue(other.getAuthorities().isEmpty());
+        assertTrue(unknown.getAuthorities().isEmpty());
     }
 
     /**
      * Test the test of privileges beetween users
      */
     @Test
-    void testHasEqualOrHigherPriviledgesThan() {
-        User contributor = new User(username, email, password, 0);
-        User admin = new User(username, email, password, 1);
-        User superadmin = new User(username, email, password, 2);
-        User unknown = new User(username, email, password, 999);
-        
+    void testHasEqualOrHigherPriviledgesThan() {        
         // Contributor
         assertTrue(contributor.hasEqualOrHigherPriviledgesThan(contributor));
         assertFalse(contributor.hasEqualOrHigherPriviledgesThan(admin));
