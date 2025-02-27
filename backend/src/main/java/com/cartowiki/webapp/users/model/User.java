@@ -24,6 +24,10 @@ public class User implements UserDetails{
     public static final String ADMINISTRATOR = "ADMINISTRATOR";
     public static final String SUPERADMINISTRATOR = "SUPERADMINISTRATOR";
 
+    private static final int CONTRIBUTOR_CODE = 0;
+    private static final int ADMINISTRATOR_CODE = 1;
+    private static final int SUPERADMINISTRATOR_CODE = 2;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_utilisateur")
@@ -154,15 +158,15 @@ public class User implements UserDetails{
         String prefix = "ROLE_";
 
         switch (adminLevel) {
-            case 0:
+            case CONTRIBUTOR_CODE:
                 authorization = Collections.singletonList(new SimpleGrantedAuthority(prefix + CONTRIBUTOR));
                 break;
         
-            case 1:
+            case ADMINISTRATOR_CODE:
                 authorization = Collections.singletonList(new SimpleGrantedAuthority(prefix + ADMINISTRATOR));
                 break;
             
-            case 2:
+            case SUPERADMINISTRATOR_CODE:
                 authorization = Collections.singletonList(new SimpleGrantedAuthority(prefix + SUPERADMINISTRATOR));
                 break;
 
@@ -207,5 +211,37 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    /**
+     * Test if one user has equal or higher priviledge than another one
+     * @param other Other user as reference
+     * @return Result of test
+     */
+    public boolean hasEqualOrHigherPriviledgesThan(User other) {
+        boolean flag;
+
+        // Don't compare adminLevel : not sure that they are sorted
+        switch (other.getAdminLevel()) {
+            case CONTRIBUTOR_CODE:
+                // Not always true : unknown adminLevel should have every access restricted
+                flag = this.adminLevel == CONTRIBUTOR_CODE || this.adminLevel == ADMINISTRATOR_CODE || this.adminLevel == SUPERADMINISTRATOR_CODE;
+                break;
+
+            case ADMINISTRATOR_CODE:
+                flag = this.adminLevel == ADMINISTRATOR_CODE || this.adminLevel == SUPERADMINISTRATOR_CODE;
+                break;
+
+            case SUPERADMINISTRATOR_CODE:
+                flag = this.adminLevel == SUPERADMINISTRATOR_CODE;
+                break;
+        
+            default:
+                // If unknown role, admins and superadmins have higher priviledge 
+                flag = this.adminLevel == ADMINISTRATOR_CODE || this.adminLevel == SUPERADMINISTRATOR_CODE;
+                break;
+        }
+
+        return flag;
     }
 }
