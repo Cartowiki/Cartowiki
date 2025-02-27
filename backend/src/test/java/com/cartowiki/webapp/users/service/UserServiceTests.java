@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,15 +31,19 @@ class UserServiceTests {
 
     @Autowired
     DatabaseConfig config;
+    
+    private String userName = "wqNOM8H4NLUY9QMDOkwMPf9RDgvSd7zT";
 
     private User administrator;
+    private User superadministrator;
 
     /**
      * Add a know user to the database before tests
      */
     @BeforeAll
     void populateDatabase() {
-        administrator = repository.save(new User("B72GCQ3aVvY3pqAPKQ7vqrk1D3byhFsM", "B72GCQ3aVvY3pqAPKQ7vqrk1D3byhFsM@domain.net", "P@ssw0rd", 0));
+        administrator = repository.save(new User("B72GCQ3aVvY3pqAPKQ7vqrk1D3byhFsM", "B72GCQ3aVvY3pqAPKQ7vqrk1D3byhFsM@domain.net", "P@ssw0rd", 1));
+        superadministrator = repository.save(new User("Y3pqAPKQ7vqrk1D3byhFsM", "Y3pqAPKQ7vqrk1D3byhFsM@domain.net", "P@ssw0rd", 2));
     }
 
     /**
@@ -45,7 +51,15 @@ class UserServiceTests {
      */
     @AfterAll
     void unpopulateDatabase() {
-        repository.deleteAll();
+        repository.delete(administrator);
+        repository.delete(superadministrator);
+
+        // Try to delete user (if it was created)
+        Optional<User> user = repository.findByUsername(userName);
+
+        if (user.isPresent()) {
+            repository.delete(user.get());
+        }
     }
 
     /**
@@ -69,10 +83,13 @@ class UserServiceTests {
 
         // Valid signup
         assertAll(() -> {
-            service.addUser(new User("wqNOM8H4NLUY9QMDOkwMPf9RDgvSd7zT", "wqNOM8H4NLUY9QMDOkwMPf@9RDgvSd7.zT", "pass", 0));
+            service.addUser(new User(userName, "wqNOM8H4NLUY9QMDOkwMPf@9RDgvSd7.zT", "pass", 0));
         });
     }
 
+    /**
+     * Test getting a user by its username
+     */
     @Test
     void testLoadUserByUsername() {
         // Existing user
@@ -83,5 +100,25 @@ class UserServiceTests {
 
         // Absent user
         assertThrows(org.springframework.security.core.userdetails.UsernameNotFoundException.class, () -> service.loadUserByUsername("bG15ie6eMnAbfJrJLwTVUGXMdyJpC4vQ"));
+    }
+
+    /**
+     * Test getting a user depending on requester's priviledges
+     */
+    @Test
+    void testGetUser() {
+        // Non-existing user
+        assertThrows(java.util.MissingResourceException.class, () -> service.getUser(-1, administrator));
+        
+        // Missing priviledge
+        assertThrows(org.springframework.security.authorization.AuthorizationDeniedException.class, () -> service.getUser(superadministrator.getId(), administrator));
+
+        // Success
+        User result = service.getUser(administrator.getId(), superadministrator);
+
+        assertEquals(administrator.getId(), result.getId());
+        assertEquals(administrator.getUsername(), result.getUsername());
+        assertEquals(administrator.getEmail(), result.getEmail());
+        assertEquals(administrator.getRole(), result.getRole());
     }
 }
