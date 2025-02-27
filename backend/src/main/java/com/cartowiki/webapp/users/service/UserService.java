@@ -121,23 +121,23 @@ public class UserService implements UserDetailsService{
 
     /**
      * Return a User from the database if it has less priviledges
-     * @param id User's id
-     * @param adminLevel Reference for adminLevel comparaison
+     * @param id Target user's id
+     * @param requester User who makes the request
      * @return User
      * @throws MissingResourceException User searched not found
      * @throws AuthorizationDeniedException User has more priviledges than the reference
      */
-    public User getLessAuthorizedUser(int id, int adminLevel) throws MissingResourceException, AuthorizationDeniedException {
+    public User getUser(int id, User requester) throws MissingResourceException, AuthorizationDeniedException {
         Optional<User> optUser = repository.findById(id);
 
         if (optUser.isEmpty()) {
             throw new MissingResourceException("Missing user", "User", String.valueOf(id));
         }
-        else if (optUser.get().getAdminLevel() > adminLevel) {
-            throw new AuthorizationDeniedException("Missing priviledge");
+        else if (requester.hasEqualOrHigherPriviledgesThan(optUser.get())) {
+            return optUser.get();
         }
         else {
-            return optUser.get();
+            throw new AuthorizationDeniedException("Missing priviledge");
         }
     }
 }
