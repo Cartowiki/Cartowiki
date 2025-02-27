@@ -38,6 +38,24 @@ class UserTests {
     }
 
     /**
+     * Test role's name depending on adminLevel
+     */
+    @Test
+    void testGetRole() {
+        // Contributor
+        assertEquals(User.CONTRIBUTOR, contributor.getRole());
+
+        // Administrator
+        assertEquals(User.ADMINISTRATOR, admin.getRole());
+
+        // Superadministrator
+        assertEquals(User.SUPERADMINISTRATOR, superadmin.getRole());
+
+        // Unknown
+        assertEquals(User.UNKNOWN, unknown.getRole());
+    }
+
+    /**
      * Test authorities depending on adminLevel
      */
     @Test

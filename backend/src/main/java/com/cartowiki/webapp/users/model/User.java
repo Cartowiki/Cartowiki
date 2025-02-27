@@ -24,6 +24,8 @@ public class User implements UserDetails{
     public static final String ADMINISTRATOR = "ADMINISTRATOR";
     public static final String SUPERADMINISTRATOR = "SUPERADMINISTRATOR";
 
+    public static final String UNKNOWN = "";
+
     private static final int CONTRIBUTOR_CODE = 0;
     private static final int ADMINISTRATOR_CODE = 1;
     private static final int SUPERADMINISTRATOR_CODE = 2;
@@ -149,29 +151,47 @@ public class User implements UserDetails{
     }
 
     /**
+     * Return the name of the user's role
+     * @return Role name
+     */
+    public String getRole() {
+        String role;
+
+        switch (adminLevel) {
+            case CONTRIBUTOR_CODE:
+                role = CONTRIBUTOR;
+                break;
+        
+            case ADMINISTRATOR_CODE:
+                role = ADMINISTRATOR;
+                break;
+            
+            case SUPERADMINISTRATOR_CODE:
+                role = SUPERADMINISTRATOR;
+                break;
+
+            default:
+                role = UNKNOWN;
+                break;
+        }
+
+        return role;
+    }
+
+    /**
      * Determine roles of the user depending on the adminLevel
      * @return Collection of roles
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<? extends GrantedAuthority> authorization;
-        String prefix = "ROLE_";
+        String role = this.getRole();
 
-        switch (adminLevel) {
-            case CONTRIBUTOR_CODE:
-                authorization = Collections.singletonList(new SimpleGrantedAuthority(prefix + CONTRIBUTOR));
-                break;
-        
-            case ADMINISTRATOR_CODE:
-                authorization = Collections.singletonList(new SimpleGrantedAuthority(prefix + ADMINISTRATOR));
-                break;
-            
-            case SUPERADMINISTRATOR_CODE:
-                authorization = Collections.singletonList(new SimpleGrantedAuthority(prefix + SUPERADMINISTRATOR));
-                break;
-
-            default:
-                authorization = Collections.emptyList();
+        if (role.equals(UNKNOWN)) {
+            authorization = Collections.emptyList();
+        }
+        else {
+            authorization = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
         }
         
         return authorization;
