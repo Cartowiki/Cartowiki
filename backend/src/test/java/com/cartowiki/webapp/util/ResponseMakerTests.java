@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.cartowiki.webapp.users.model.User;
+
 /**
  * Tests of ResponseMaker
  */
@@ -27,5 +29,21 @@ class ResponseMakerTests {
         assertEquals(status, response.getStatusCode());
         assertEquals(1, map.size()); // One Key/Value
         assertEquals(value, map.get(key));
+    }
+
+    /**
+     * Test the response containing the User's public data
+     */
+    @Test
+    void testUserInfoResponse() {
+        User user = new User("john", "john.doe@email.com", "P@ssw0rd", 1);
+
+        ResponseEntity<Object> response = ResponseMaker.userInfoResponse(user);
+        HashMap<String, String> map = (HashMap<String, String>) response.getBody();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(user.getUsername(), map.get("username"));
+        assertEquals(user.getEmail(), map.get("email"));
+        assertEquals(user.getRole(), map.get("role"));
     }
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.cartowiki.webapp.users.model.User;
+
 /**
  * HTTP responses maker
  */
@@ -32,5 +34,20 @@ public abstract class ResponseMaker {
         map.put(key, value);
 
         return new ResponseEntity<>(map, httpStatus);
+    }
+
+    /**
+     * Return a reponse containing user's username, email and role
+     * @param user User
+     * @return Response entity
+     */
+    public static ResponseEntity<Object> userInfoResponse(User user) {
+        HashMap<String, String> map = new HashMap<>();
+
+        map.put("username", user.getUsername());
+        map.put("email", user.getEmail());
+        map.put("role", user.getRole());
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 }
