@@ -1,5 +1,7 @@
 package com.cartowiki.webapp.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import com.cartowiki.webapp.users.model.User;
 public abstract class ResponseMaker {
     public static final String MESSAGE = "message";
     public static final String TOKEN = "token";
+    public static final String DATA = "data";
 
     /**
      * No-argument constructor
@@ -28,8 +31,8 @@ public abstract class ResponseMaker {
      * @param httpStatus Http Status for status code
      * @return Response entity
      */
-    public static ResponseEntity<Object> singleValueResponse(String key, String value, HttpStatus httpStatus) {
-        HashMap<String, String> map = new HashMap<>();
+    public static ResponseEntity<Object> singleValueResponse(String key, Object value, HttpStatus httpStatus) {
+        HashMap<String, Object> map = new HashMap<>();
 
         map.put(key, value);
 
@@ -48,6 +51,28 @@ public abstract class ResponseMaker {
         map.put("email", user.getEmail());
         map.put("role", user.getRole());
 
-        return new ResponseEntity<>(map, HttpStatus.OK);
+        return singleValueResponse(DATA, map, HttpStatus.OK);
+    }
+
+    /**
+     * Return a list of users' public data
+     * @param listUsers List of users
+     * @return Response entity
+     */
+    public static ResponseEntity<Object> listUsersInfoResponse(Collection<User> listUsers) {
+        ArrayList<HashMap<String, String>> data = new ArrayList<>();
+
+        // For each user, send only the username, email and role
+        for (User user: listUsers) {
+            HashMap<String, String> map = new HashMap<>();
+
+            map.put("username", user.getUsername());
+            map.put("email", user.getEmail());
+            map.put("role", user.getRole());
+
+            data.add(map);
+        }
+
+        return singleValueResponse(DATA, data, HttpStatus.OK);
     }
 }

@@ -39,11 +39,12 @@ class ResponseMakerTests {
         User user = new User("john", "john.doe@email.com", "P@ssw0rd", 1);
 
         ResponseEntity<Object> response = ResponseMaker.userInfoResponse(user);
-        HashMap<String, String> map = (HashMap<String, String>) response.getBody();
+        HashMap<String, Object> map = (HashMap<String, Object>) response.getBody();
+        HashMap<String, String> data = (HashMap<String, String>) map.get(ResponseMaker.DATA);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(user.getUsername(), map.get("username"));
-        assertEquals(user.getEmail(), map.get("email"));
-        assertEquals(user.getRole(), map.get("role"));
+        assertEquals(user.getUsername(), data.get("username"));
+        assertEquals(user.getEmail(), data.get("email"));
+        assertEquals(user.getRole(), data.get("role"));
     }
 }
