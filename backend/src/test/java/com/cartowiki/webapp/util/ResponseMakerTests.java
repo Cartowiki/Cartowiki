@@ -40,9 +40,10 @@ class ResponseMakerTests {
 
         ResponseEntity<Object> response = ResponseMaker.userInfoResponse(user);
         HashMap<String, Object> map = (HashMap<String, Object>) response.getBody();
-        HashMap<String, String> data = (HashMap<String, String>) map.get(ResponseMaker.DATA);
+        HashMap<String, Object> data = (HashMap<String, Object>) map.get(ResponseMaker.DATA);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(user.getId(), data.get("id"));
         assertEquals(user.getUsername(), data.get("username"));
         assertEquals(user.getEmail(), data.get("email"));
         assertEquals(user.getRole(), data.get("role"));

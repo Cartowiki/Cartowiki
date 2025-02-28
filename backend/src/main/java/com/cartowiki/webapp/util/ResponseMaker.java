@@ -45,8 +45,9 @@ public abstract class ResponseMaker {
      * @return Response entity
      */
     public static ResponseEntity<Object> userInfoResponse(User user) {
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
 
+        map.put("id", user.getId());
         map.put("username", user.getUsername());
         map.put("email", user.getEmail());
         map.put("role", user.getRole());
@@ -60,12 +61,13 @@ public abstract class ResponseMaker {
      * @return Response entity
      */
     public static ResponseEntity<Object> listUsersInfoResponse(Collection<User> listUsers) {
-        ArrayList<HashMap<String, String>> data = new ArrayList<>();
+        ArrayList<HashMap<String, Object>> data = new ArrayList<>();
 
         // For each user, send only the username, email and role
         for (User user: listUsers) {
-            HashMap<String, String> map = new HashMap<>();
-
+            HashMap<String, Object> map = new HashMap<>();
+            
+            map.put("id", user.getId());
             map.put("username", user.getUsername());
             map.put("email", user.getEmail());
             map.put("role", user.getRole());
