@@ -100,4 +100,23 @@ class UsersControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.DATA + ".email").value(administrator.getEmail()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.DATA + ".role").value(administrator.getRole()));
     }
+
+    /**
+     * Test getting all users' public data with less or equal priviledge
+     */
+    @Test
+    void testGetAllLessPriviledgedUser() throws Exception {
+        String url = "/users";
+
+        // Unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.get(url)
+                        .header("Authorization", "Bearer " + contributorToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+        
+        // Authorized user
+        mockMvc.perform(MockMvcRequestBuilders.get(url)
+                        .header("Authorization", "Bearer " + administratorToken))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.DATA).isArray());
+    }
 }

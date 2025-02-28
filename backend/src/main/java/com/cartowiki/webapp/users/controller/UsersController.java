@@ -1,5 +1,6 @@
 package com.cartowiki.webapp.users.controller;
 
+import java.util.List;
 import java.util.MissingResourceException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class UsersController {
      * Return a response with JSON data
      * @param id User's id
      * @param authentication Current user's authentication
-     * @return Reponse 
+     * @return Response 
      */
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUser(@PathVariable("id") int id, Authentication authentication) {
@@ -55,5 +56,17 @@ public class UsersController {
         }
 
         return response;
+    }
+
+    /**
+     * Return a response containing the list of all users with less or equal priviledge
+     * @param authentication Current user's authentication
+     * @return Response
+     */
+    @GetMapping("")
+    public ResponseEntity<Object> getAllLessPriviledgedUsers(Authentication authentication) {
+        List<User> data = service.getAllUsers((User) authentication.getPrincipal());
+
+        return ResponseMaker.listUsersInfoResponse(data);
     }
 }
