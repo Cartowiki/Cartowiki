@@ -26,9 +26,9 @@ public class User implements UserDetails{
 
     public static final String UNKNOWN = "";
 
-    private static final int CONTRIBUTOR_CODE = 0;
-    private static final int ADMINISTRATOR_CODE = 1;
-    private static final int SUPERADMINISTRATOR_CODE = 2;
+    public static final int CONTRIBUTOR_CODE = 0;
+    public static final int ADMINISTRATOR_CODE = 1;
+    public static final int SUPERADMINISTRATOR_CODE = 2;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
