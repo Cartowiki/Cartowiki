@@ -96,8 +96,8 @@ class UsersControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.get(url + String.valueOf(administrator.getId()))
                         .header("Authorization", "Bearer " + superadministratorToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value(administrator.getUsername()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(administrator.getEmail()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.role").value(administrator.getRole()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.DATA + ".username").value(administrator.getUsername()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.DATA + ".email").value(administrator.getEmail()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.DATA + ".role").value(administrator.getRole()));
     }
 }
