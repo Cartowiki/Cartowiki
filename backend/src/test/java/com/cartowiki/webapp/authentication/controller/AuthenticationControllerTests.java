@@ -1,5 +1,7 @@
 package com.cartowiki.webapp.authentication.controller;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.cartowiki.webapp.users.config.DatabaseConfig;
 import com.cartowiki.webapp.users.model.User;
 import com.cartowiki.webapp.users.repository.UserRepository;
+import com.cartowiki.webapp.util.ResponseMaker;
 
 /**
  * Tests requests for authentication
@@ -56,7 +59,13 @@ class AuthenticationControllerTests {
      */
     @AfterAll
     void removeMockUsers() {
-        repository.deleteAll();
+        repository.delete(user);
+
+        Optional<User> optNewUser = repository.findByUsername(newUser.getUsername());
+
+        if (optNewUser.isPresent()) {
+                repository.delete(optNewUser.get());
+        }
     }
 
     /**
@@ -72,35 +81,35 @@ class AuthenticationControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"field1\":\"value\", \"filed2\":\"value\", \"filed3\":\"value\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Missing username"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Missing username"));
 
         // Missing username
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Missing username"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Missing username"));
 
         // Missing password
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"" + user.getUsername() + "\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Missing password"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Missing password"));
 
         // Bad credentials 
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"" + user.getUsername() + "\", \"password\": \"XUeZ2\"}"))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Invalid credentials"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Invalid credentials"));
 
         // Valid logging in
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"" + user.getUsername() + "\", \"password\": \"" + userPassword + "\"}"))
                 .andExpect(MockMvcResultMatchers.status().isAccepted())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.token").exists());
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.TOKEN).exists());
     }
 
     /**
@@ -116,63 +125,63 @@ class AuthenticationControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"field1\":\"value\", \"filed2\":\"value\", \"filed3\":\"value\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Missing username"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Missing username"));
 
         // Missing username
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Missing username"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Missing username"));
 
         // Missing email
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"" + user.getUsername() + "\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Missing email"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Missing email"));
 
         // Missing password
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"" + user.getUsername() + "\", \"email\": \"" + user.getEmail() + "\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Missing password"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Missing password"));
 
         // Username is too long
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"" + "A".repeat(config.getUsernameMaxLength() + 1) + "\", \"email\": \"" + user.getEmail() + "\", \"password\":\"pass\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Username is too long"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Username is too long"));
 
         // Email is too long
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"" + user.getUsername() + "\", \"email\": \"" + "A".repeat(config.getEmailMaxLength() + 1) + "\", \"password\":\"pass\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Email is too long"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Email is too long"));
 
         // Username is taken [Error]
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"" + user.getUsername() + "\", \"email\": \"" + user.getEmail() + "\", \"password\":\"" + user.getPassword() + "\"}"))
                 .andExpect(MockMvcResultMatchers.status().isConflict())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Username is already taken"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Username is already taken"));
 
         // Invalid email
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"XUeZ2tfqT9S4vYr3\", \"email\": \"" + "A".repeat(config.getEmailMaxLength()) + "\", \"password\":\"" + user.getPassword() + "\"}"))
                 .andExpect(MockMvcResultMatchers.status().isConflict())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Email address is not valid"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Email address is not valid"));
 
         // Email is taken [Error]
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"XUeZ2tfqT9S4vYr3\", \"email\": \"" + user.getEmail() + "\", \"password\":\"" + user.getPassword() + "\"}"))
                 .andExpect(MockMvcResultMatchers.status().isConflict())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Email address is already taken"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("Email address is already taken"));
 
         // Valid user
         mockMvc.perform(MockMvcRequestBuilders.post(url)
