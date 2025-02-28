@@ -49,7 +49,8 @@ class JwtAuthFilterTests {
      */
     @AfterAll
     void removeMockUsers() {
-        repository.deleteAll();
+        repository.delete(contributor);
+        repository.delete(administrator);
     }
 
     /**
@@ -92,7 +93,7 @@ class JwtAuthFilterTests {
                         .header("Authorization", "Bearer " + token))
                .andExpect(MockMvcResultMatchers.status().isNotFound()); // Modify HTTP status if endpoint enabled
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/users/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/users")
                         .header("Authorization", "Bearer " + token))
                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
