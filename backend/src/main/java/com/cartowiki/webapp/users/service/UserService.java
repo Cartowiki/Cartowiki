@@ -1,5 +1,7 @@
 package com.cartowiki.webapp.users.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -139,5 +141,37 @@ public class UserService implements UserDetailsService{
         else {
             throw new AuthorizationDeniedException("Missing priviledge");
         }
+    }
+
+    /**
+     * Return the list of all users with less or equal priviledges
+     * @param requester User who makes the request
+     * @return List of users with less or equal priviledges
+     */
+    public List<User> getAllUsers(User requester) {
+        ArrayList<Integer> adminLevels = new ArrayList<>();
+
+        switch (requester.getAdminLevel()) {
+            case User.CONTRIBUTOR_CODE:
+                adminLevels.add(User.CONTRIBUTOR_CODE);
+                break;
+
+            case User.ADMINISTRATOR_CODE:
+                adminLevels.add(User.CONTRIBUTOR_CODE);
+                adminLevels.add(User.ADMINISTRATOR_CODE);
+                break;
+
+            case User.SUPERADMINISTRATOR_CODE:
+                adminLevels.add(User.CONTRIBUTOR_CODE);
+                adminLevels.add(User.ADMINISTRATOR_CODE);
+                adminLevels.add(User.SUPERADMINISTRATOR_CODE);
+                break;
+            
+            default:
+                // List already empty
+                break;
+        }
+
+        return repository.findAllByAdminLevelIn(adminLevels);
     }
 }

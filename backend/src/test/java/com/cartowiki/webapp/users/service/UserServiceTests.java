@@ -3,6 +3,7 @@ package com.cartowiki.webapp.users.service;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 
@@ -34,6 +35,7 @@ class UserServiceTests {
     
     private String userName = "wqNOM8H4NLUY9QMDOkwMPf9RDgvSd7zT";
 
+    private User contributor;
     private User administrator;
     private User superadministrator;
 
@@ -42,6 +44,7 @@ class UserServiceTests {
      */
     @BeforeAll
     void populateDatabase() {
+        contributor = repository.save(new User("MgKE4fhZWr26Y9j5X3L7sn", "MgKE4fhZWr26Y@9j5X3L7.sn", "P@ssw0rd", 0));
         administrator = repository.save(new User("B72GCQ3aVvY3pqAPKQ7vqrk1D3byhFsM", "B72GCQ3aVvY3pqAPKQ7vqrk1D3byhFsM@domain.net", "P@ssw0rd", 1));
         superadministrator = repository.save(new User("Y3pqAPKQ7vqrk1D3byhFsM", "Y3pqAPKQ7vqrk1D3byhFsM@domain.net", "P@ssw0rd", 2));
     }
@@ -51,6 +54,7 @@ class UserServiceTests {
      */
     @AfterAll
     void unpopulateDatabase() {
+        repository.delete(contributor);
         repository.delete(administrator);
         repository.delete(superadministrator);
 
@@ -120,5 +124,26 @@ class UserServiceTests {
         assertEquals(administrator.getUsername(), result.getUsername());
         assertEquals(administrator.getEmail(), result.getEmail());
         assertEquals(administrator.getRole(), result.getRole());
+    }
+
+    /**
+     * Test getting all users with less or equals priviledges than the requester
+     */
+    @Test
+    void testGetAllUsers() {
+        // From contributor
+        for (User dbUser: service.getAllUsers(contributor)) {
+            assertEquals(User.CONTRIBUTOR_CODE, dbUser.getAdminLevel());
+        }
+
+        // From administrator
+        for (User dbUser: service.getAllUsers(administrator)) {
+            assertTrue(dbUser.getAdminLevel() == User.CONTRIBUTOR_CODE || dbUser.getAdminLevel() == User.ADMINISTRATOR_CODE);
+        }
+
+        // From superadministrator
+        for (User dbUser: service.getAllUsers(superadministrator)) {
+            assertTrue(dbUser.getAdminLevel() == User.CONTRIBUTOR_CODE || dbUser.getAdminLevel() == User.ADMINISTRATOR_CODE || dbUser.getAdminLevel() == User.SUPERADMINISTRATOR_CODE);
+        }
     }
 }
