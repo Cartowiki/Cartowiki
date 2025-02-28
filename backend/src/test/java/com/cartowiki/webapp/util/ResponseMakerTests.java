@@ -2,7 +2,9 @@ package com.cartowiki.webapp.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -47,5 +49,27 @@ class ResponseMakerTests {
         assertEquals(user.getUsername(), data.get("username"));
         assertEquals(user.getEmail(), data.get("email"));
         assertEquals(user.getRole(), data.get("role"));
+    }
+
+    /**
+     * Test the response containing the list of public data of all users
+     */
+    @Test
+    void testListUsersInfoResponse() {
+        User user = new User("john", "john.doe@email.com", "P@ssw0rd", 1);
+        ArrayList<User> listUsers = new ArrayList<>();
+
+        listUsers.add(user);
+
+        ResponseEntity<Object> response = ResponseMaker.listUsersInfoResponse(listUsers);
+        HashMap<String, Object> map = (HashMap<String, Object>) response.getBody();
+        List<HashMap<String, Object>> data = (List<HashMap<String, Object>>) map.get(ResponseMaker.DATA);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(listUsers.size(), data.size());
+        assertEquals(user.getId(), data.get(0).get("id"));
+        assertEquals(user.getUsername(), data.get(0).get("username"));
+        assertEquals(user.getEmail(), data.get(0).get("email"));
+        assertEquals(user.getRole(), data.get(0).get("role"));
     }
 }
