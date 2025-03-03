@@ -179,8 +179,10 @@ public class UserService implements UserDetailsService{
      * Delete a user if it has less or equal privileges
      * @param id Target user's id
      * @param requester User who makes the request
+     * @throws MissingResourceException User not found or already deleted
+     * @throws AuthorizationDeniedException Requester doesn't have enough priviledge
      */
-    public void deleteUser(int id, User requester) {
+    public void deleteUser(int id, User requester) throws MissingResourceException, AuthorizationDeniedException{
         Optional<User> user = repository.findById(id);
 
         if (user.isEmpty()) {
@@ -192,7 +194,7 @@ public class UserService implements UserDetailsService{
         else if (requester.hasEqualOrHigherPriviledgesThan(user.get())) {
             // Soft-delete a user
             user.get().setEnabled(false);
-            
+
             repository.save(user.get());
         }
         else {

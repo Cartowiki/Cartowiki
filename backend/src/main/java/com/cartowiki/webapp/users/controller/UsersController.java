@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,5 +69,29 @@ public class UsersController {
         List<User> data = service.getAllUsers((User) authentication.getPrincipal());
 
         return ResponseMaker.listUsersInfoResponse(data);
+    }
+
+    /**
+     * Delete a user
+     * @param id User's id
+     * @param authentication Current user's authentication
+     * @return Response 
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteUser(@PathVariable("id") int id, Authentication authentication) {
+        ResponseEntity<Object> response;
+        
+        try {
+            service.deleteUser(id, (User) authentication.getPrincipal());
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "User successfully deleted", HttpStatus.OK);
+        }
+        catch (MissingResourceException e) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (AuthorizationDeniedException e) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+
+        return response;
     }
 }
