@@ -174,4 +174,29 @@ public class UserService implements UserDetailsService{
 
         return repository.findAllByAdminLevelIn(adminLevels);
     }
+
+    /**
+     * Delete a user if it has less or equal privileges
+     * @param id Target user's id
+     * @param requester User who makes the request
+     */
+    public void deleteUser(int id, User requester) {
+        Optional<User> user = repository.findById(id);
+
+        if (user.isEmpty()) {
+            throw new MissingResourceException("Missing user", "User", String.valueOf(id));
+        }
+        else if (!user.get().isEnabled()) {
+            throw new MissingResourceException("User already deleted", "User", String.valueOf(id));
+        }
+        else if (requester.hasEqualOrHigherPriviledgesThan(user.get())) {
+            // Soft-delete a user
+            user.get().setEnabled(false);
+            
+            repository.save(user.get());
+        }
+        else {
+            throw new AuthorizationDeniedException("Missing priviledge");
+        }
+    }
 }
