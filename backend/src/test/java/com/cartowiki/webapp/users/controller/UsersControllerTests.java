@@ -34,6 +34,7 @@ class UsersControllerTests {
     @Autowired
     JwtService jwtService;
 
+    User deletedUser;
     User contributor;
     User administrator;
     User superadministrator;
@@ -47,6 +48,7 @@ class UsersControllerTests {
      */
     @BeforeAll
     void addMockUsers() {
+        deletedUser = repository.save(new User("A5NUhq", "FgVw@EKR.fc", "P@ssword", 0, false));
 
         contributor = repository.save(new User("A5NUhqTH3x", "Fna2gVw@EKR.fc", "P@ssword", 0));
         administrator = repository.save(new User("jQDqkGMa7HEm", "zt9RsVd@P83.eg", "P@ssword", 1));
@@ -63,6 +65,7 @@ class UsersControllerTests {
      */
     @AfterAll
     void removeMockUsers() {
+        repository.delete(deletedUser);
         repository.delete(contributor);
         repository.delete(administrator);
         repository.delete(superadministrator);
@@ -118,5 +121,34 @@ class UsersControllerTests {
                         .header("Authorization", "Bearer " + administratorToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.DATA).isArray());
+    }
+
+    /**
+     * Test soft delete one user with less or equal priviledge
+     */
+    @Test
+    void testDeleteUser() throws Exception {
+        String url = "/users/";
+
+        // Unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.delete(url + String.valueOf(administrator.getId()))
+                        .header("Authorization", "Bearer " + contributorToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        // Missing user
+        mockMvc.perform(MockMvcRequestBuilders.delete(url + "-1")
+                        .header("Authorization", "Bearer " + administratorToken))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+        // Deleted user
+        mockMvc.perform(MockMvcRequestBuilders.delete(url + String.valueOf(deletedUser.getId()))
+                        .header("Authorization", "Bearer " + administratorToken))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+        
+        // Authorized user
+        mockMvc.perform(MockMvcRequestBuilders.delete(url + String.valueOf(contributor.getId()))
+                        .header("Authorization", "Bearer " + superadministratorToken))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + ResponseMaker.MESSAGE).value("User successfully deleted"));
     }
 }
