@@ -35,7 +35,7 @@ public class UsersController {
     }
 
     /**
-     * Return a response with JSON data
+     * Return a response containing the user's public data
      * @param id User's id
      * @param authentication Current user's authentication
      * @return Response 

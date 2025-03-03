@@ -47,6 +47,9 @@ public class User implements UserDetails{
     @Column(name = "mail")
     private String email;
 
+    @Column(name = "est_actif")
+    private boolean enabled;
+
     /**
      * No-argument constructor
      */
@@ -55,17 +58,35 @@ public class User implements UserDetails{
     }
 
     /**
-     * Constructor with arguments
+     * Constructor with arguments for an enabled user
      * @param username Username
      * @param email User's email address
      * @param password User's password
      * @param adminLevel User's adminstrator level
+     * @param enabled Is the account not deleted
      */
     public User(String username, String email, String password, int adminLevel) {
         this.password = password;
         this.adminLevel = adminLevel;
         this.username = username;
         this.email = email;
+        this.enabled = true;
+    }
+
+    /**
+     * Constructor with arguments
+     * @param username Username
+     * @param email User's email address
+     * @param password User's password
+     * @param adminLevel User's adminstrator level
+     * @param enabled Is the account not deleted
+     */
+    public User(String username, String email, String password, int adminLevel, boolean enabled) {
+        this.password = password;
+        this.adminLevel = adminLevel;
+        this.username = username;
+        this.email = email;
+        this.enabled = enabled;
     }
 
     /**
@@ -151,6 +172,23 @@ public class User implements UserDetails{
     }
 
     /**
+     * Check if the account is enabled (i.e. is the account deleted)
+     * @return Is the account enabled
+     */
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    /**
+     * Edit if the account is enabled
+     * @return Is the account enabled
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    /**
      * Return the name of the user's role
      * @return Role name
      */
@@ -221,15 +259,6 @@ public class User implements UserDetails{
      */
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    /**
-     * Check if the account is enabled
-     * @return Is the account enabled
-     */
-    @Override
-    public boolean isEnabled() {
         return true;
     }
 
