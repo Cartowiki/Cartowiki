@@ -2,6 +2,7 @@ package com.cartowiki.webapp.users.service;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -44,7 +45,7 @@ class UserServiceTests {
      */
     @BeforeAll
     void populateDatabase() {
-        contributor = repository.save(new User("MgKE4fhZWr26Y9j5X3L7sn", "MgKE4fhZWr26Y@9j5X3L7.sn", "P@ssw0rd", 0));
+        contributor = repository.save(new User("MgKE4fhZWr26Y9j5X3L7sn", "MgKE4fhZWr26Y@9j5X3L7.sn", "P@ssw0rd", 0, false));
         administrator = repository.save(new User("B72GCQ3aVvY3pqAPKQ7vqrk1D3byhFsM", "B72GCQ3aVvY3pqAPKQ7vqrk1D3byhFsM@domain.net", "P@ssw0rd", 1));
         superadministrator = repository.save(new User("Y3pqAPKQ7vqrk1D3byhFsM", "Y3pqAPKQ7vqrk1D3byhFsM@domain.net", "P@ssw0rd", 2));
     }
@@ -145,5 +146,28 @@ class UserServiceTests {
         for (User dbUser: service.getAllUsers(superadministrator)) {
             assertTrue(dbUser.getAdminLevel() == User.CONTRIBUTOR_CODE || dbUser.getAdminLevel() == User.ADMINISTRATOR_CODE || dbUser.getAdminLevel() == User.SUPERADMINISTRATOR_CODE);
         }
+    }
+
+    /**
+     * Test the soft-deletion of a user
+     */
+    @Test
+    void testDeleteUser() {
+        // Non-existing user
+        assertThrows(java.util.MissingResourceException.class, () -> service.deleteUser(-1, administrator));
+
+        // Deleted user
+        assertThrows(java.util.MissingResourceException.class, () -> service.deleteUser(contributor.getId(), administrator));
+        
+        // Missing priviledge
+        assertThrows(org.springframework.security.authorization.AuthorizationDeniedException.class, () -> service.getUser(superadministrator.getId(), administrator));
+        
+        // Success
+        assertAll(() -> {
+            service.deleteUser(administrator.getId(), superadministrator);
+            administrator = repository.findById(administrator.getId()).get();
+        });
+
+        assertFalse(administrator.isEnabled());
     }
 }
