@@ -49,6 +49,7 @@ class ResponseMakerTests {
         assertEquals(user.getUsername(), data.get("username"));
         assertEquals(user.getEmail(), data.get("email"));
         assertEquals(user.getRole(), data.get("role"));
+        assertEquals(user.isEnabled(), data.get("enabled"));
     }
 
     /**
@@ -71,5 +72,6 @@ class ResponseMakerTests {
         assertEquals(user.getUsername(), data.get(0).get("username"));
         assertEquals(user.getEmail(), data.get(0).get("email"));
         assertEquals(user.getRole(), data.get(0).get("role"));
+        assertEquals(user.isEnabled(), data.get(0).get("enabled"));
     }
 }

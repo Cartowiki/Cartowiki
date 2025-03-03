@@ -51,6 +51,7 @@ public abstract class ResponseMaker {
         map.put("username", user.getUsername());
         map.put("email", user.getEmail());
         map.put("role", user.getRole());
+        map.put("enabled", user.isEnabled());
 
         return singleValueResponse(DATA, map, HttpStatus.OK);
     }
@@ -71,6 +72,7 @@ public abstract class ResponseMaker {
             map.put("username", user.getUsername());
             map.put("email", user.getEmail());
             map.put("role", user.getRole());
+            map.put("enabled", user.isEnabled());
 
             data.add(map);
         }
