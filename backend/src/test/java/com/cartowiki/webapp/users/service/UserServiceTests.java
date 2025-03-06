@@ -15,7 +15,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.cartowiki.webapp.users.config.DatabaseConfig;
 import com.cartowiki.webapp.users.model.User;
@@ -169,5 +171,82 @@ class UserServiceTests {
         });
 
         assertFalse(administrator.isEnabled());
+    }
+
+    /**
+     * Test changing username
+     */
+    @Test
+    void testChangeUsername() {
+        // Already used username
+        String usedName = administrator.getUsername();
+
+        assertThrows(IllegalArgumentException.class, () -> service.changeUsername(contributor, usedName));
+
+        // Success
+        String newName = "ac2Un38NXBvs7KrZGxwWjQ";
+
+        assertAll(() -> service.changeUsername(contributor, newName));
+        assertEquals(newName, contributor.getUsername());
+    }
+
+    /**
+     * Test changing email address
+     */
+    @Test
+    void testChangeEmail() {
+        // Already used username
+        String usedMail = administrator.getEmail();
+
+        assertThrows(IllegalArgumentException.class, () -> service.changeEmail(contributor, usedMail));
+
+        // Invalid email
+        String invalidMail = "ac2Un38NXBvs7KrZGxwWjQ";
+        
+        assertThrows(IllegalArgumentException.class, () -> service.changeEmail(contributor, invalidMail));
+
+        // Success
+        String newMail = "ac2Un38NXBvs@7KrZGxwW.jQ";
+
+        assertAll(() -> service.changeEmail(contributor, newMail));
+        assertEquals(newMail, contributor.getEmail());
+    }
+
+    /**
+     * Test changing password
+     */
+    @Test
+    void testChangePassword() {
+        String newPassword = "H3ll0W0rld!";
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        assertAll(() -> service.changePassword(contributor, newPassword));
+        assertTrue(encoder.matches(newPassword, contributor.getPassword()));        
+    }
+
+    /**
+     * Test changing role
+     */
+    @Test
+    void testChangeRole() {
+        // Unknown role
+        assertThrows(IllegalArgumentException.class, () -> service.changeRole(contributor, "GOD", administrator));
+
+        // Contributor can't change role
+        assertThrows(AuthorizationDeniedException.class, () -> service.changeRole(contributor, User.ADMINISTRATOR, contributor));
+        assertThrows(AuthorizationDeniedException.class, () -> service.changeRole(contributor, User.SUPERADMINISTRATOR, contributor));
+
+        // Admin can't become superadmin
+        assertThrows(AuthorizationDeniedException.class, () -> service.changeRole(administrator, User.SUPERADMINISTRATOR, administrator));
+
+        // Success
+        assertAll(() -> service.changeRole(contributor, User.ADMINISTRATOR, superadministrator));
+        assertEquals(User.ADMINISTRATOR, contributor.getRole());
+
+        assertAll(() -> service.changeRole(contributor, User.CONTRIBUTOR, superadministrator));
+        assertEquals(User.CONTRIBUTOR, contributor.getRole());
+
+        assertAll(() -> service.changeRole(administrator, User.SUPERADMINISTRATOR, superadministrator));
+        assertEquals(User.SUPERADMINISTRATOR, administrator.getRole());
     }
 }
