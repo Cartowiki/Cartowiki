@@ -201,4 +201,99 @@ public class UserService implements UserDetailsService{
             throw new AuthorizationDeniedException("Missing priviledge");
         }
     }
+    
+    /**
+     * Change the username of a user
+     * @param user Target user
+     * @param username New username
+     * @return User with changed username
+     * @throws IllegalArgumentException Username is already taken
+     */
+    public User changeUsername(User user, String username) throws IllegalArgumentException {
+        if (this.isUsernameTaken(username)) {
+            throw new IllegalArgumentException("Username is already taken");
+        }
+        else {
+            user.setUsername(username);
+        }
+
+        return user;
+    }
+
+    /**
+     * Change the email address of a user
+     * @param user Target user
+     * @param email New email address
+     * @return User with changed email address
+     * @throws IllegalArgumentException Email address is already taken or isn't valid
+     */
+    public User changeEmail(User user, String email) throws IllegalArgumentException {
+        if (!this.isEmailValid(email)) {
+            throw new IllegalArgumentException("Email is invalid");
+        }   
+        else if (this.isEmailTaken(email)) {
+            throw new IllegalArgumentException("Email is already taken");
+        }
+        else {
+            user.setEmail(email);
+        }
+
+        return user;
+    }
+
+    /**
+     * Change the password of a user
+     * @param user Target user
+     * @param password New password
+     * @return User with changed password
+     */
+    public User changePassword(User user, String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        user.setPassword(encoder.encode(password));
+
+        return user;
+    }
+
+    /**
+     * Change the role of a user
+     * @param user Target user
+     * @param role New role
+     * @param requester Requester
+     * @return User with changed role
+     * @throws AuthorizationDeniedException Illegal role change
+     * @throws IllegalArgumentException Unknown role
+     */
+    public User changeRole(User user, String role, User requester) throws AuthorizationDeniedException, IllegalArgumentException{
+        if (!role.equals(User.CONTRIBUTOR) && !role.equals(User.ADMINISTRATOR) && !role.equals(User.SUPERADMINISTRATOR)) {
+            throw new IllegalArgumentException("Unknown role");
+        }
+        else if ((requester.getAdminLevel() == User.CONTRIBUTOR_CODE) || (requester.getAdminLevel() == User.ADMINISTRATOR_CODE && role.equals(User.SUPERADMINISTRATOR))) {
+            // A contributor cannot change role
+            // A administrator cannot change role to superadmin
+
+            throw new AuthorizationDeniedException("Illegal role change");
+        }
+        else {
+            switch (role) {
+                case User.CONTRIBUTOR:
+                    user.setAdminLevel(User.CONTRIBUTOR_CODE);
+                    break;
+
+                case User.ADMINISTRATOR:
+                    user.setAdminLevel(User.ADMINISTRATOR_CODE);
+                    break;
+
+                case User.SUPERADMINISTRATOR:
+                    user.setAdminLevel(User.SUPERADMINISTRATOR_CODE);
+                    break;
+
+                default:
+                    // Do nothing
+                    break;
+            }
+        }
+        
+        return user;
+    }
 }
