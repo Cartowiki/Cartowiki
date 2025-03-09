@@ -1,19 +1,20 @@
-package com.cartowiki.webapp.authentication.model;
+package com.cartowiki.webapp.users.model;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class SignUpRequestTests {
+/**
+ * User edit request tests
+ */
+class EditRequestTests {
     /**
      * Test if username is empty
      */
     @Test
     void testIsUsernameEmpty() {
-        SignUpRequest request = new SignUpRequest();
+        EditRequest request = new EditRequest();
 
         assertTrue(request.isUsernameEmpty());
         
@@ -27,7 +28,7 @@ class SignUpRequestTests {
      */
     @Test
     void testIsEmailEmpty() {
-        SignUpRequest request = new SignUpRequest();
+        EditRequest request = new EditRequest();
 
         assertTrue(request.isEmailEmpty());
         
@@ -41,12 +42,26 @@ class SignUpRequestTests {
      */
     @Test
     void testIsPasswordEmpty() {
-        SignUpRequest request = new SignUpRequest();
+        EditRequest request = new EditRequest();
 
         assertTrue(request.isPasswordEmpty());
         
         request.setPassword("test");
 
         assertFalse(request.isPasswordEmpty());
+    }
+
+    /**
+     * Test if role is empty
+     */
+    @Test
+    void testIsRoleEmpty() {
+        EditRequest request = new EditRequest();
+
+        assertTrue(request.isRoleEmpty());
+        
+        request.setRole("test");
+
+        assertFalse(request.isRoleEmpty());
     }
 }

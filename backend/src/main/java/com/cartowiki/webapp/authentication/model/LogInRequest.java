@@ -4,6 +4,8 @@ package com.cartowiki.webapp.authentication.model;
  * Data template for log in requests
  */
 public class LogInRequest {
+    public static final String EMPTY_ARGUMENT = "";
+
     private String username;
     private String password;
     
@@ -11,8 +13,8 @@ public class LogInRequest {
      * No-argument constructor
      */
     public LogInRequest() {
-        this.username = "";
-        this.password = "";
+        this.username = EMPTY_ARGUMENT;
+        this.password = EMPTY_ARGUMENT;
     }
 
     /**
@@ -45,5 +47,21 @@ public class LogInRequest {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * Test if username is not set
+     * @return Is username not set
+     */
+    public boolean isUsernameEmpty() {
+        return this.username.equals(EMPTY_ARGUMENT);
+    }
+
+    /**
+     * Test if password is not set
+     * @return Is password not set
+     */
+    public boolean isPasswordEmpty() {
+        return this.password.equals(EMPTY_ARGUMENT);
     }
 }
