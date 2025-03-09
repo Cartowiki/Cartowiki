@@ -84,4 +84,36 @@ public class EditRequest {
     public void setRole(String role) {
         this.role = role;
     }
+
+    /**
+     * Test if username is not set
+     * @return Is username not set
+     */
+    public boolean isUsernameEmpty() {
+        return this.username.equals(EMPTY_ARGUMENT);
+    }
+
+    /**
+     * Test if password is not set
+     * @return Is password not set
+     */
+    public boolean isPasswordEmpty() {
+        return this.password.equals(EMPTY_ARGUMENT);
+    }
+
+    /**
+     * Test if email address is not set
+     * @return Is email address not set
+     */
+    public boolean isEmailEmpty() {
+        return this.email.equals(EMPTY_ARGUMENT);
+    }
+
+    /**
+     * Test if role is not set
+     * @return Is role not set
+     */
+    public boolean isRoleEmpty() {
+        return this.role.equals(EMPTY_ARGUMENT);
+    }
 }
