@@ -296,4 +296,12 @@ public class UserService implements UserDetailsService{
         
         return user;
     }
+
+    /**
+     * Save a user instance
+     * @param user Instance to save
+     */
+    public void saveUser(User user) {
+        repository.save(user);
+    }
 }
