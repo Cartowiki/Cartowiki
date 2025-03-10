@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +42,7 @@ public class SecurityConfig {
     private JwtAuthFilter authFilter;
     private UserService userService;
 
+    @Value("${security.cors_url}")
     private String corsUrl;
 
     /**
@@ -155,6 +157,8 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
+
+        System.out.println("CORS URL: " + this.corsUrl);
 
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Collections.singletonList(this.corsUrl));
