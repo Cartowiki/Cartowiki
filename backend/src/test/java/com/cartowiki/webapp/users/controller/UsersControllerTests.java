@@ -144,6 +144,11 @@ class UsersControllerTests {
                         .header("Authorization", "Bearer " + contributorToken))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
 
+        // Illegal request on user with more priviledge
+        mockMvc.perform(MockMvcRequestBuilders.delete(url + String.valueOf(superadministrator.getId()))
+                        .header("Authorization", "Bearer " + administratorToken))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
         // Missing user
         mockMvc.perform(MockMvcRequestBuilders.delete(url + "-1")
                         .header("Authorization", "Bearer " + administratorToken))
