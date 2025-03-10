@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cartowiki.webapp.users.model.EditRequest;
 import com.cartowiki.webapp.users.model.User;
 import com.cartowiki.webapp.users.service.UserService;
 import com.cartowiki.webapp.util.ResponseMaker;
@@ -96,8 +98,51 @@ public class UsersController {
         return response;
     }
 
-    @PutMapping("")
-    public ResponseEntity<Object> editUser() {
-        return null;
+    /**
+     * Edit a user
+     * @param id Id of the user to edit
+     * @param data New values for user
+     * @param authentication Current user's authentication
+     * @return Response
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> editUser(@PathVariable("id") int id, @RequestBody EditRequest data, Authentication authentication) {
+        ResponseEntity<Object> response;
+        User requester = (User) authentication.getPrincipal();
+
+        try {
+            // Throws an exception if not found, or illegal access
+            User user = service.getUser(id, requester);
+
+            if (!data.isUsernameEmpty()) {
+                user = service.changeUsername(user, data.getUsername());
+            }
+
+            if (!data.isEmailEmpty()) {
+                user = service.changeEmail(user, data.getEmail());
+            }
+
+            if (!data.isPasswordEmpty()) {
+                user = service.changePassword(user, data.getPassword());
+            }
+
+            if (!data.isRoleEmpty()) {
+                user = service.changeRole(user, data.getRole(), requester);
+            }
+
+            service.saveUser(user);
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "User successfully edited", HttpStatus.ACCEPTED);
+        }
+        catch (MissingResourceException e) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (IllegalArgumentException e) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch (AuthorizationDeniedException e) {
+            response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, e.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        
+        return response;
     }
 }
