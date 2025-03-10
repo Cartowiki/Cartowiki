@@ -63,7 +63,6 @@ public class User implements UserDetails{
      * @param email User's email address
      * @param password User's password
      * @param adminLevel User's adminstrator level
-     * @param enabled Is the account not deleted
      */
     public User(String username, String email, String password, int adminLevel) {
         this.password = password;
@@ -182,7 +181,7 @@ public class User implements UserDetails{
 
     /**
      * Edit if the account is enabled
-     * @return Is the account enabled
+     * @param enabled Is the account enabled
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

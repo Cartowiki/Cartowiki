@@ -149,7 +149,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Create filter to allowed Cross-Origin Resources Sharing (CROS)
+     * Create filter to allowed Cross-Origin Resources Sharing (CORS)
      * @return
      */
     @Bean
@@ -168,16 +168,16 @@ public class SecurityConfig {
     }
 
     /**
-     * Get Cross-origin Ressources Sharing (CROS) allowed origin
-     * @return Cross-origin Ressources Sharing (CROS) allowed origin
+     * Get Cross-origin Ressources Sharing (CORS) allowed origin
+     * @return Cross-origin Ressources Sharing (CORS) allowed origin
      */
     public String getCorsUrl() {
         return corsUrl;
     }
 
     /**
-     * Set Cross-origin Ressources Sharing (CROS) allowed origin
-     * @return New Cross-origin Ressources Sharing (CROS) allowed origin
+     * Set Cross-origin Ressources Sharing (CORS) allowed origin
+     * @param corsUrl New Cross-origin Ressources Sharing (CORS) allowed origin
      */
     public void setCorsUrl(String corsUrl) {
         this.corsUrl = corsUrl;

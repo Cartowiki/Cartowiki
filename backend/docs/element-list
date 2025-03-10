@@ -1,0 +1,12 @@
+com.cartowiki.webapp
+com.cartowiki.webapp.authentication.config
+com.cartowiki.webapp.authentication.controller
+com.cartowiki.webapp.authentication.filter
+com.cartowiki.webapp.authentication.model
+com.cartowiki.webapp.authentication.service
+com.cartowiki.webapp.users.config
+com.cartowiki.webapp.users.controller
+com.cartowiki.webapp.users.model
+com.cartowiki.webapp.users.repository
+com.cartowiki.webapp.users.service
+com.cartowiki.webapp.util
