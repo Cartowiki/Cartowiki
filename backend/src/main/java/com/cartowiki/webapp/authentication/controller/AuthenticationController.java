@@ -96,6 +96,12 @@ public class AuthenticationController {
      * @return Response
      */
     @PostMapping("/login")
+    @Operation(summary = "Log in an existing user", description = "If success, returns a Javascript Web Token")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "202", description = "User is logged in."),
+        @ApiResponse(responseCode = "401", description = "Invalid credentials."),
+        @ApiResponse(responseCode = "400", description = "Some arguments are missing.")
+    })
     public ResponseEntity<Object> authenticateAndGetToken(@RequestBody LogInRequest data) {
         ResponseEntity<Object> response;
         
