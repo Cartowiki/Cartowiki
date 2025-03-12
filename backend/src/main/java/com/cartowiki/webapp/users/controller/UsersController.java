@@ -114,19 +114,19 @@ public class UsersController {
             // Throws an exception if not found, or illegal access
             User user = service.getUser(id, requester);
 
-            if (!data.isUsernameEmpty()) {
+            if (!data.checkForEmptyUsername()) {
                 user = service.changeUsername(user, data.getUsername());
             }
 
-            if (!data.isEmailEmpty()) {
+            if (!data.checkForEmptyEmail()) {
                 user = service.changeEmail(user, data.getEmail());
             }
 
-            if (!data.isPasswordEmpty()) {
+            if (!data.checkForEmptyPassword()) {
                 user = service.changePassword(user, data.getPassword());
             }
 
-            if (!data.isRoleEmpty()) {
+            if (!data.checkForEmptyRole()) {
                 user = service.changeRole(user, data.getRole(), requester);
             }
 

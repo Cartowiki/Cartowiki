@@ -52,13 +52,13 @@ public class AuthenticationController {
     public ResponseEntity<Object> signUp(@RequestBody SignUpRequest data){
         ResponseEntity<Object> response;
 
-        if (data.isUsernameEmpty()) {
+        if (data.checkForEmptyUsername()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing username", HttpStatus.BAD_REQUEST);
         }
-        else if (data.isEmailEmpty()) {
+        else if (data.checkForEmptyEmail()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing email", HttpStatus.BAD_REQUEST);
         }
-        else if (data.isPasswordEmpty()) {
+        else if (data.checkForEmptyPassword()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing password", HttpStatus.BAD_REQUEST);
         }
         else {
@@ -87,10 +87,10 @@ public class AuthenticationController {
     public ResponseEntity<Object> authenticateAndGetToken(@RequestBody LogInRequest data) {
         ResponseEntity<Object> response;
         
-        if (data.isUsernameEmpty()) {
+        if (data.checkForEmptyUsername()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing username", HttpStatus.BAD_REQUEST);
         }
-        else if (data.isPasswordEmpty()) {
+        else if (data.checkForEmptyPassword()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing password", HttpStatus.BAD_REQUEST);
         }
         else {

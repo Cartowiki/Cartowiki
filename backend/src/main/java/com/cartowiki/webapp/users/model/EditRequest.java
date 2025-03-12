@@ -89,7 +89,7 @@ public class EditRequest {
      * Test if username is not set
      * @return Is username not set
      */
-    public boolean isUsernameEmpty() {
+    public boolean checkForEmptyUsername() {
         return this.username.equals(EMPTY_ARGUMENT);
     }
 
@@ -97,7 +97,7 @@ public class EditRequest {
      * Test if password is not set
      * @return Is password not set
      */
-    public boolean isPasswordEmpty() {
+    public boolean checkForEmptyPassword() {
         return this.password.equals(EMPTY_ARGUMENT);
     }
 
@@ -105,7 +105,7 @@ public class EditRequest {
      * Test if email address is not set
      * @return Is email address not set
      */
-    public boolean isEmailEmpty() {
+    public boolean checkForEmptyEmail() {
         return this.email.equals(EMPTY_ARGUMENT);
     }
 
@@ -113,7 +113,7 @@ public class EditRequest {
      * Test if role is not set
      * @return Is role not set
      */
-    public boolean isRoleEmpty() {
+    public boolean checkForEmptyRole() {
         return this.role.equals(EMPTY_ARGUMENT);
     }
 }

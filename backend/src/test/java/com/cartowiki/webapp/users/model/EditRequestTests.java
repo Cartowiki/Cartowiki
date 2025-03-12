@@ -16,11 +16,11 @@ class EditRequestTests {
     void testIsUsernameEmpty() {
         EditRequest request = new EditRequest();
 
-        assertTrue(request.isUsernameEmpty());
+        assertTrue(request.checkForEmptyUsername());
         
         request.setUsername("test");
 
-        assertFalse(request.isUsernameEmpty());
+        assertFalse(request.checkForEmptyUsername());
     }
 
     /**
@@ -30,11 +30,11 @@ class EditRequestTests {
     void testIsEmailEmpty() {
         EditRequest request = new EditRequest();
 
-        assertTrue(request.isEmailEmpty());
+        assertTrue(request.checkForEmptyEmail());
         
         request.setEmail("test");
 
-        assertFalse(request.isEmailEmpty());
+        assertFalse(request.checkForEmptyEmail());
     }
 
     /**
@@ -44,11 +44,11 @@ class EditRequestTests {
     void testIsPasswordEmpty() {
         EditRequest request = new EditRequest();
 
-        assertTrue(request.isPasswordEmpty());
+        assertTrue(request.checkForEmptyPassword());
         
         request.setPassword("test");
 
-        assertFalse(request.isPasswordEmpty());
+        assertFalse(request.checkForEmptyPassword());
     }
 
     /**
@@ -58,10 +58,10 @@ class EditRequestTests {
     void testIsRoleEmpty() {
         EditRequest request = new EditRequest();
 
-        assertTrue(request.isRoleEmpty());
+        assertTrue(request.checkForEmptyRole());
         
         request.setRole("test");
 
-        assertFalse(request.isRoleEmpty());
+        assertFalse(request.checkForEmptyRole());
     }
 }
