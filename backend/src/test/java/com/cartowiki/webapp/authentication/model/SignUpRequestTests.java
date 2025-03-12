@@ -15,11 +15,11 @@ class SignUpRequestTests {
     void testIsUsernameEmpty() {
         SignUpRequest request = new SignUpRequest();
 
-        assertTrue(request.isUsernameEmpty());
+        assertTrue(request.checkForEmptyUsername());
         
         request.setUsername("test");
 
-        assertFalse(request.isUsernameEmpty());
+        assertFalse(request.checkForEmptyUsername());
     }
 
     /**
@@ -29,11 +29,11 @@ class SignUpRequestTests {
     void testIsEmailEmpty() {
         SignUpRequest request = new SignUpRequest();
 
-        assertTrue(request.isEmailEmpty());
+        assertTrue(request.checkForEmptyEmail());
         
         request.setEmail("test");
 
-        assertFalse(request.isEmailEmpty());
+        assertFalse(request.checkForEmptyEmail());
     }
 
     /**
@@ -43,10 +43,10 @@ class SignUpRequestTests {
     void testIsPasswordEmpty() {
         SignUpRequest request = new SignUpRequest();
 
-        assertTrue(request.isPasswordEmpty());
+        assertTrue(request.checkForEmptyPassword());
         
         request.setPassword("test");
 
-        assertFalse(request.isPasswordEmpty());
+        assertFalse(request.checkForEmptyPassword());
     }
 }

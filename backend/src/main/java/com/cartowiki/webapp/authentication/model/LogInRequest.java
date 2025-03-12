@@ -53,7 +53,7 @@ public class LogInRequest {
      * Test if username is not set
      * @return Is username not set
      */
-    public boolean isUsernameEmpty() {
+    public boolean checkForEmptyUsername() {
         return this.username.equals(EMPTY_ARGUMENT);
     }
 
@@ -61,7 +61,7 @@ public class LogInRequest {
      * Test if password is not set
      * @return Is password not set
      */
-    public boolean isPasswordEmpty() {
+    public boolean checkForEmptyPassword() {
         return this.password.equals(EMPTY_ARGUMENT);
     }
 }

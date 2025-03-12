@@ -15,11 +15,11 @@ class LogInRequestTests {
     void testIsUsernameEmpty() {
         LogInRequest request = new LogInRequest();
 
-        assertTrue(request.isUsernameEmpty());
+        assertTrue(request.checkForEmptyUsername());
         
         request.setUsername("test");
 
-        assertFalse(request.isUsernameEmpty());
+        assertFalse(request.checkForEmptyUsername());
     }
 
     /**
@@ -29,10 +29,10 @@ class LogInRequestTests {
     void testIsPasswordEmpty() {
         LogInRequest request = new LogInRequest();
 
-        assertTrue(request.isPasswordEmpty());
+        assertTrue(request.checkForEmptyPassword());
         
         request.setPassword("test");
 
-        assertFalse(request.isPasswordEmpty());
+        assertFalse(request.checkForEmptyPassword());
     }
 }
