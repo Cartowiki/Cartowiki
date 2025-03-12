@@ -77,6 +77,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers("/auth/signup", "/auth/login", "/api/geoserver/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()  // Permit some pathes for Swagger process
 
                 // User management (ADMINISTRATOR only)
                 .requestMatchers(HttpMethod.GET, "/users").hasRole(User.ADMINISTRATOR)
