@@ -1,13 +1,21 @@
 package com.cartowiki.webapp.authentication.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+
 /**
  * Data template for sign up requests
  */
 public class SignUpRequest {
     public static final String EMPTY_ARGUMENT = "";
 
+    @Schema(name = "username", example = "cartowiki", requiredMode = RequiredMode.REQUIRED)
     private String username;
+
+    @Schema(name = "email", example = "contributor@cartowiki.com", requiredMode = RequiredMode.REQUIRED)
     private String email;
+
+    @Schema(name = "password", example = "Str0ngP@ssw0rd!", requiredMode = RequiredMode.REQUIRED)
     private String password;
     
     /**

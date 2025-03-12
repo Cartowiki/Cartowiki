@@ -20,11 +20,17 @@ import com.cartowiki.webapp.authentication.model.SignUpRequest;
 import com.cartowiki.webapp.authentication.service.JwtService;
 import com.cartowiki.webapp.util.ResponseMaker;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * Authentication requests manager
  */
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication")
 public class AuthenticationController {
     private UserService service;
     private JwtService jwtService;
@@ -49,6 +55,12 @@ public class AuthenticationController {
      * @return Response
      */
     @PostMapping("/signup")
+    @Operation(summary = "Sign up a new contributor", description = "Create an account for a new contributor")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "202", description = "New contributor successfully signed up."),
+        @ApiResponse(responseCode = "409", description = "Username or email is already used."),
+        @ApiResponse(responseCode = "400", description = "Some arguments are missing or not well-formated.")
+    })
     public ResponseEntity<Object> signUp(@RequestBody SignUpRequest data){
         ResponseEntity<Object> response;
 
