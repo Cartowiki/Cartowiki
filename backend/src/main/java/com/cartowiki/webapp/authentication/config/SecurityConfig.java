@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,10 +27,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.http.HttpMethod;
 
 import com.cartowiki.webapp.authentication.filter.JwtAuthFilter;
-import com.cartowiki.webapp.authentication.service.UserService;
+import com.cartowiki.webapp.users.model.User;
+import com.cartowiki.webapp.users.service.UserService;
 
 /**
  * Spring Security configurations
@@ -79,21 +80,21 @@ public class SecurityConfig {
                 // Public endpoints
                 .requestMatchers("/auth/signup", "/auth/login", "/api/**").permitAll()
 
-                // User management (ADMIN only)
-                .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/users/{id}").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/users/{id}").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
+                // User management (ADMINISTRATOR only)
+                .requestMatchers(HttpMethod.GET, "/users").hasRole(User.ADMINISTRATOR)
+                .requestMatchers(HttpMethod.GET, "/users/{id}").hasRole(User.ADMINISTRATOR)
+                .requestMatchers(HttpMethod.PUT, "/users/{id}").hasRole(User.ADMINISTRATOR)
+                .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole(User.ADMINISTRATOR)
 
                 // Contribution management
-                .requestMatchers(HttpMethod.GET, "/contributions").hasAnyRole("CONTRIBUTOR", "ADMIN")
-                .requestMatchers(HttpMethod.GET, "/contributions/{id}").hasAnyRole("CONTRIBUTOR", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/contributions").hasAnyRole("CONTRIBUTOR", "ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/contributions/{id}").hasAnyRole("CONTRIBUTOR", "ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/contributions/{id}").hasAnyRole("CONTRIBUTOR", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/contributions").hasRole(User.CONTRIBUTOR)
+                .requestMatchers(HttpMethod.GET, "/contributions/{id}").hasRole(User.CONTRIBUTOR)
+                .requestMatchers(HttpMethod.POST, "/contributions").hasRole(User.CONTRIBUTOR)
+                .requestMatchers(HttpMethod.PUT, "/contributions/{id}").hasRole(User.CONTRIBUTOR)
+                .requestMatchers(HttpMethod.DELETE, "/contributions/{id}").hasRole(User.CONTRIBUTOR)
 
-                // Contribution validation (ADMIN only)
-                .requestMatchers(HttpMethod.POST, "/contributions/{id}/validate").hasRole("ADMIN")
+                // Contribution validation (ADMINISTRATOR only)
+                .requestMatchers(HttpMethod.POST, "/contributions/{id}/validate").hasRole(User.ADMINISTRATOR)
 
                 // Protect all other endpoints
                 .anyRequest().authenticated()
@@ -144,13 +145,13 @@ public class SecurityConfig {
      */
     @Bean
     public RoleHierarchy roleHierarchy() {
-        String hierarchy = "ROLE_SUPERADMINISTRATOR > ROLE_ADMINISTRATOR > ROLE_CONTRIBUTOR";
+        String hierarchy = "ROLE_" + User.SUPERADMINISTRATOR + " > ROLE_" + User.ADMINISTRATOR + " > ROLE_" + User.CONTRIBUTOR;
 
         return RoleHierarchyImpl.fromHierarchy(hierarchy);
     }
 
     /**
-     * Create filter to allowed Cross-Origin Resources Sharing (CROS)
+     * Create filter to allowed Cross-Origin Resources Sharing (CORS)
      * @return
      */
     @Bean
@@ -171,16 +172,16 @@ public class SecurityConfig {
     }
 
     /**
-     * Get Cross-origin Ressources Sharing (CROS) allowed origin
-     * @return Cross-origin Ressources Sharing (CROS) allowed origin
+     * Get Cross-origin Ressources Sharing (CORS) allowed origin
+     * @return Cross-origin Ressources Sharing (CORS) allowed origin
      */
     public String getCorsUrl() {
         return corsUrl;
     }
 
     /**
-     * Set Cross-origin Ressources Sharing (CROS) allowed origin
-     * @return New Cross-origin Ressources Sharing (CROS) allowed origin
+     * Set Cross-origin Ressources Sharing (CORS) allowed origin
+     * @param corsUrl New Cross-origin Ressources Sharing (CORS) allowed origin
      */
     public void setCorsUrl(String corsUrl) {
         this.corsUrl = corsUrl;

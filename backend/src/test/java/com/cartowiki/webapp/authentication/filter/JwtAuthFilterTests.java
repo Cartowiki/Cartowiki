@@ -12,9 +12,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.cartowiki.webapp.authentication.model.User;
-import com.cartowiki.webapp.authentication.repository.UserRepository;
 import com.cartowiki.webapp.authentication.service.JwtService;
+import com.cartowiki.webapp.users.model.User;
+import com.cartowiki.webapp.users.repository.UserRepository;
 
 /**
  * Test the filter chain element checking JWT authentication
@@ -49,7 +49,8 @@ class JwtAuthFilterTests {
      */
     @AfterAll
     void removeMockUsers() {
-        repository.deleteAll();
+        repository.delete(contributor);
+        repository.delete(administrator);
     }
 
     /**
@@ -92,7 +93,7 @@ class JwtAuthFilterTests {
                         .header("Authorization", "Bearer " + token))
                .andExpect(MockMvcResultMatchers.status().isNotFound()); // Modify HTTP status if endpoint enabled
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/users/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/users")
                         .header("Authorization", "Bearer " + token))
                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }

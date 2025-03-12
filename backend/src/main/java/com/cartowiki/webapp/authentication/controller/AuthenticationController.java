@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cartowiki.webapp.authentication.model.User;
-import com.cartowiki.webapp.authentication.model.request.LogInRequest;
-import com.cartowiki.webapp.authentication.model.request.SignUpRequest;
-import com.cartowiki.webapp.authentication.service.UserService;
+import com.cartowiki.webapp.users.model.User;
+import com.cartowiki.webapp.users.service.UserService;
+import com.cartowiki.webapp.authentication.model.LogInRequest;
+import com.cartowiki.webapp.authentication.model.SignUpRequest;
 import com.cartowiki.webapp.authentication.service.JwtService;
 import com.cartowiki.webapp.util.ResponseMaker;
 
@@ -52,13 +52,13 @@ public class AuthenticationController {
     public ResponseEntity<Object> signUp(@RequestBody SignUpRequest data){
         ResponseEntity<Object> response;
 
-        if (data.getUsername().equals("")) {
+        if (data.isUsernameEmpty()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing username", HttpStatus.BAD_REQUEST);
         }
-        else if (data.getEmail().equals("")) {
+        else if (data.isEmailEmpty()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing email", HttpStatus.BAD_REQUEST);
         }
-        else if (data.getPassword().equals("")) {
+        else if (data.isPasswordEmpty()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing password", HttpStatus.BAD_REQUEST);
         }
         else {
@@ -87,10 +87,10 @@ public class AuthenticationController {
     public ResponseEntity<Object> authenticateAndGetToken(@RequestBody LogInRequest data) {
         ResponseEntity<Object> response;
         
-        if (data.getUsername().equals("")) {
+        if (data.isUsernameEmpty()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing username", HttpStatus.BAD_REQUEST);
         }
-        else if (data.getPassword().equals("")) {
+        else if (data.isPasswordEmpty()) {
             response = ResponseMaker.singleValueResponse(ResponseMaker.MESSAGE, "Missing password", HttpStatus.BAD_REQUEST);
         }
         else {
