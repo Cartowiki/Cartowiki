@@ -119,6 +119,33 @@ public class UsersController {
      * @return Response
      */
     @GetMapping("")
+    @Operation(
+        summary = "Retrieve public information of all users", 
+        description = "Return the public information of every users with less or equal priviledges",
+        parameters = {
+            @Parameter(
+                name = "Authorization",
+                in = ParameterIn.HEADER,
+                description = "JavaScript Web Token for user authentication",
+                required = true,
+                example = "Bearer [admin or superadmin JWT]",
+                schema = @Schema(type = "string")
+            )
+        }
+        )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Users' public data",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"data\": [" +
+                            "{\"id\": 1, \"username\": \"cartowiki\", \"email\": \"contributor@cartowiki.com\", \"role\": \"CONTRIBUTOR\", \"enabled\": true}," +
+                            "{\"id\": 2, \"username\": \"myAdmin\", \"email\": \"administrator@cartowiki.com\", \"role\": \"ADMINISTRATOR\", \"enabled\": true}" +
+                            "]}")
+                )
+        )
+    })
     public ResponseEntity<Object> getAllLessPriviledgedUsers(Authentication authentication) {
         List<User> data = service.getAllUsers((User) authentication.getPrincipal());
 
