@@ -159,7 +159,47 @@ public class UsersController {
      * @return Response 
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUser(@PathVariable("id") int id, Authentication authentication) {
+    @Operation(
+        summary = "Delete one user", 
+        description = "Delete one user with less or equal priviledges",
+        parameters = {
+            @Parameter(
+                name = "Authorization",
+                in = ParameterIn.HEADER,
+                description = "JavaScript Web Token for user authentication",
+                required = true,
+                example = "Bearer [admin or superadmin JWT]",
+                schema = @Schema(type = "string")
+            )
+        }
+        )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "User successfully deleted",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"User successfully deleted\"}")
+                )
+        ),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Illegal request on a user with higher priviledges",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Missing priviledge\"}")
+                )
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "User is not found, or already deleted",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Missing user\"}")
+                )
+        )
+    })
+    public ResponseEntity<Object> deleteUser(@PathVariable("id") @Parameter(name = "id", description = "User's id", example = "3") int id, Authentication authentication) {
         ResponseEntity<Object> response;
         
         try {
