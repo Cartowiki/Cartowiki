@@ -21,11 +21,22 @@ import com.cartowiki.webapp.users.model.User;
 import com.cartowiki.webapp.users.service.UserService;
 import com.cartowiki.webapp.util.ResponseMaker;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * Users manager
  */
 @RestController
 @RequestMapping("/users")
+@Tag(name = "Users management (admin and superadmin only)")
 public class UsersController {
     private UserService service;
 
@@ -45,7 +56,47 @@ public class UsersController {
      * @return Response 
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUser(@PathVariable("id") int id, Authentication authentication) {
+    @Operation(
+        summary = "Retrieve public information of one user", 
+        description = "Return the public information of one user with less or equal priviledges",
+        parameters = {
+            @Parameter(
+                name = "Authorization",
+                in = ParameterIn.HEADER,
+                description = "JavaScript Web Token for user authentication",
+                required = true,
+                example = "Bearer [admin or superadmin JWT]",
+                schema = @Schema(type = "string")
+            )
+        }
+        )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "User's public data",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"data\": {\"id\": 1, \"username\": \"cartowiki\", \"email\": \"contributor@cartowiki.com\", \"role\": \"CONTRIBUTOR\", \"enabled\": true}}")
+                )
+        ),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Illegal request for data of user with higher priviledges",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Missing priviledge\"}")
+                )
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "User is not found",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Missing user\"}")
+                )
+        )
+    })
+    public ResponseEntity<Object> getUser(@PathVariable("id") @Parameter(name = "id", description = "User's id", example = "3") int id, Authentication authentication) {
         ResponseEntity<Object> response;
         
         try {
