@@ -21,6 +21,8 @@ import com.cartowiki.webapp.authentication.service.JwtService;
 import com.cartowiki.webapp.util.ResponseMaker;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -57,9 +59,30 @@ public class AuthenticationController {
     @PostMapping("/signup")
     @Operation(summary = "Sign up a new contributor", description = "Create an account for a new contributor")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "202", description = "New contributor successfully signed up."),
-        @ApiResponse(responseCode = "409", description = "Username or email is already used."),
-        @ApiResponse(responseCode = "400", description = "Some arguments are missing or not well-formated.")
+        @ApiResponse(
+            responseCode = "202", 
+            description = "New contributor successfully signed up.",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"New contributor created\"}")
+            )
+            ),
+        @ApiResponse(
+            responseCode = "409", 
+            description = "Username or email is already used.",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Email is already taken\"}")
+            )
+            ),
+        @ApiResponse(
+            responseCode = "400", 
+            description = "Some arguments are missing or not well-formated.",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Missing username\"}")
+            )
+            )
     })
     public ResponseEntity<Object> signUp(@RequestBody SignUpRequest data){
         ResponseEntity<Object> response;
@@ -98,9 +121,30 @@ public class AuthenticationController {
     @PostMapping("/login")
     @Operation(summary = "Log in an existing user", description = "If success, returns a Javascript Web Token")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "202", description = "User is logged in."),
-        @ApiResponse(responseCode = "401", description = "Invalid credentials."),
-        @ApiResponse(responseCode = "400", description = "Some arguments are missing.")
+        @ApiResponse(
+            responseCode = "202", 
+            description = "User is logged in.",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzA4MzQ1MTIzLCJleHAiOjE3MDgzNTUxMjN9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\"}")
+            )
+            ),
+        @ApiResponse(
+            responseCode = "401", 
+            description = "Invalid credentials.",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Invalid credentials\"}")
+            )
+            ),
+        @ApiResponse(
+            responseCode = "400", 
+            description = "Some arguments are missing.",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Missing username\"}")
+            )
+            )
     })
     public ResponseEntity<Object> authenticateAndGetToken(@RequestBody LogInRequest data) {
         ResponseEntity<Object> response;
