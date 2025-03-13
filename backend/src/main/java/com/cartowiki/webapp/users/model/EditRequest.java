@@ -1,14 +1,23 @@
 package com.cartowiki.webapp.users.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * User edit request
  */
 public class EditRequest {
     public static final String EMPTY_ARGUMENT = "";
 
+    @Schema(name = "username", example = "cartowiki")
     private String username;
+
+    @Schema(name = "email", example = "contributor@cartowiki.com")
     private String email;
+
+    @Schema(name = "password", example = "Str0ngP@ssw0rd!")
     private String password;
+
+    @Schema(name = "role", example = "ADMINISTRATOR")
     private String role;
 
     /**

@@ -224,7 +224,55 @@ public class UsersController {
      * @return Response
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Object> editUser(@PathVariable("id") int id, @RequestBody EditRequest data, Authentication authentication) {
+    @Operation(
+        summary = "Edit one user", 
+        description = "Edit one user with less or equal priviledges",
+        parameters = {
+            @Parameter(
+                name = "Authorization",
+                in = ParameterIn.HEADER,
+                description = "JavaScript Web Token for user authentication",
+                required = true,
+                example = "Bearer [admin or superadmin JWT]",
+                schema = @Schema(type = "string")
+            )
+        }
+        )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "User successfully edited",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"User successfully edited\"}")
+                )
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid value of one argument",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Email is already taken\"}")
+                )
+        ),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Illegal request on a user with higher priviledges, or trying to give higher role than themself",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Illegal role change\"}")
+                )
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "User is not found, or already deleted",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Missing user\"}")
+                )
+        )
+    })
+    public ResponseEntity<Object> editUser(@PathVariable("id") @Parameter(name = "id", description = "User's id", example = "3") int id, @RequestBody EditRequest data, Authentication authentication) {
         ResponseEntity<Object> response;
         User requester = (User) authentication.getPrincipal();
 
