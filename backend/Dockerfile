@@ -1,5 +1,7 @@
 # Étape 1 : Utiliser une image avec JDK pour compiler l'application
-FROM openjdk:21-jdk-slim as builder
+FROM openjdk:21-jdk-slim AS builder
+## FIXME : Trouver une autre image sans vulnérabilités
+
 
 # Définir le répertoire de travail à ./backend
 WORKDIR /app
@@ -15,6 +17,7 @@ RUN ./mvnw clean package -DskipTests
 
 # Étape 2 : Utiliser l'image de base pour exécuter l'application
 FROM openjdk:21-jdk-slim
+## FIXME : FROM eclipse-temurin:21-jre-slim:21.0.1_12-jre use this instead to avoid some vulnerabilitées ?
 
 # Définir le répertoire de travail
 WORKDIR /app

@@ -1,4 +1,5 @@
 FROM node:22 AS build
+## FIXME : This image contains vulnerability issues
 WORKDIR /app
 
 COPY package.json package-lock.json ./

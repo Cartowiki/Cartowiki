@@ -10,3 +10,9 @@ tasks:
     cmds:
       - echo "{{.GREETING}}"
     silent: true
+
+  run-dev:
+    desc: "Run the development server"
+    cmds:
+      - echo "Starting the development server..."
+      - npm run start
