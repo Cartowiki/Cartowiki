@@ -20,6 +20,15 @@ tasks:
     cmds:
       - docker compose -f docker-compose.dev.yml down -v
 
+  run-integ:
+    cmds:
+      - docker compose -f docker-compose.integ.yml build
+      - docker compose -f docker-compose.integ.yml up
+
+  clean-integ:
+    cmds:
+      - docker compose -f docker-compose.integ.yml down -v
+
   run-prod:
     cmds:
       - docker compose -f docker-compose.prod.yml build
